@@ -1,0 +1,34 @@
+# --- Secrets and environment-specific config ---
+/config.php
+
+# --- Local tooling and data (never commit) ---
+# Demo accounts with plain-text passwords
+/.local/dummy/
+/.local/branding/seed-dummy.php
+# Portable MariaDB binaries + database files
+/.local/mariadb/
+# Puppeteer / Chrome used for screenshots
+/.local/browser/
+# Plugin installers and pre-install database dump
+/.local/plugins/
+
+# --- Database dumps, settings snapshots and layout backups ---
+*.sql
+*.sql.gz
+/.local/deploy/
+/.local/branding/before-*.json
+/.local/branding/before-*/
+/.local/branding/settings-before*.json
+/.local/branding/control-probe-state.json
+/.local/branding/home-dom.html
+/.local/branding/logo-page.html
+# Verification screenshots
+/.local/branding/*.png
+
+# --- Build / editor noise ---
+node_modules/
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

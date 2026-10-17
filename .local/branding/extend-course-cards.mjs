@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+const path='public/branding/bapanas/padi.css';
+let css=fs.readFileSync(path,'utf8');
+const start=css.indexOf('/* Native Moodle course catalogue:');
+const end=css.indexOf(':where(.moon-layout#page-site-index #frontpage-category-names)',start);
+if(start<0||end<0)throw new Error('Course style boundaries not found');
+const scope='.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search)';
+const block=css.slice(start,end).replaceAll('.moon-layout#page-site-index',scope).replaceAll('.courses.frontpage-course-list-all','.courses').replaceAll('.frontpage-course-list-all ','.courses ');
+css=css.slice(0,start)+block+css.slice(end);
+fs.writeFileSync(path,css);

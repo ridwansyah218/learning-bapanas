@@ -1,0 +1,97 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_boost/carousel
+
+
+    Example context (json):
+    {
+        "slides": [
+         {
+             "index": 0,
+             "active": "active",
+             "name": "slide_one",
+             "image": "",
+             "title": "Slide title",
+             "subtitle": "Slide subtitle",
+             "slidelabel": "Slide 1 of 2"
+         },
+         {
+             "index": 1,
+             "active": "",
+             "name": "slide_two",
+             "image": "",
+             "title": "Slide title",
+             "subtitle": "Slide subtitle",
+             "slidelabel": "Slide 2 of 2"
+         }
+        ]
+    }
+}}
+
+<section id="snap-site-carousel" class="carousel slide" aria-label="{{covercarousellabel}}">
+    <span class="visually-hidden">{{carouselsronlytext}}</span>
+
+    {{#slides}}
+        <link rel="preload" as="image" href="{{{image}}}">
+    {{/slides}}
+
+    <div class="carousel-inner" id="snap-carousel-container">
+        <!-- Carousel slides. -->
+        {{#slides}}
+            <div class="carousel-item carousel-{{name}} {{active}}" role="group" aria-label="{{slidelabel}}">
+                <div class="carousel-slide" style="background-image:url({{{image}}});">
+                    <div class="carousel-caption">
+                        <h1>{{title}}</h1>
+                        <p>{{subtitle}}</p>
+                    </div>
+                </div>
+            </div>
+        {{/slides}}
+    </div>
+
+    <div class="carousel-controls-capsule {{carouselhidecontrols}}">
+        <div id="carousel-play-resume-buttons">
+            <span class="carousel-controls-divider" aria-hidden="true"></span>
+            <button id="carousel-toggle-button" role="button" class="btn btn-default btn-xs"
+                    aria-pressed="false"
+                    data-label-play="{{carouselplaybutton}}"
+                    data-label-pause="{{carouselpausebutton}}"
+                    aria-label="{{carouselpausebutton}}">
+                <span class="icon fa fa-pause fa-fw"></span>
+            </button>
+        </div>
+
+        <a class="carousel-control-prev" href="#snap-site-carousel" role="button" data-bs-slide="prev">
+            <i class="carousel-control-prev-icon fa-solid fa-caret-left" aria-hidden="true"></i>
+            <span class="visually-hidden">Previous slide</span>
+        </a>
+
+        <ul role="list" class="carousel-indicators js-only">
+            {{#slides}}
+                <li>
+                    <button data-bs-target="#snap-site-carousel" data-bs-slide-to="{{index}}" class="{{active}}" aria-label="{{dotlabel}}"></button>
+                </li>
+            {{/slides}}
+        </ul>
+
+        <a class="carousel-control-next" href="#snap-site-carousel" role="button" data-bs-slide="next">
+            <i class="carousel-control-next-icon fa-solid fa-caret-right" aria-hidden="true"></i>
+            <span class="visually-hidden">Next slide</span>
+        </a>
+    </div>
+</section>

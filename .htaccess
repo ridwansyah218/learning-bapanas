@@ -1,0 +1,6 @@
+Options -Indexes
+# Avoid OPcache VirtualProtect failures with XAMPP's Windows PHP build.
+<IfModule php_module>
+    php_flag opcache.enable Off
+</IfModule>
+# URL mapping is configured by Apache Alias in apache-learning-bapanas.conf.

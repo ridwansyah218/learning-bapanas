@@ -1,0 +1,2 @@
+<?php
+$string['course'] = 'Kursus';

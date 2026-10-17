@@ -1,0 +1,189 @@
+/* PADI / Bapanas. Official logo colours: Peraturan Bapanas 01/2022. */
+body.moon-layout {
+    --padi-green: #1e7816;
+    --padi-forest: #194d14;
+    --padi-gold: #ecbc33;
+    --padi-ink: #183127;
+    --padi-muted: #5c6c62;
+    --padi-line: #e0e8df;
+    color: var(--padi-ink);
+    background: #fff;
+    font-family: "Segoe UI", Arial, sans-serif;
+    overflow-x: clip;
+}
+.moon-layout h1, .moon-layout h2, .moon-layout h3, .moon-layout h4 {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-weight: 650;
+    letter-spacing: -.035em;
+    color: var(--padi-ink);
+}
+.moon-layout a { color: var(--padi-green); }
+.moon-layout a:focus-visible, .moon-layout button:focus-visible,
+.moon-layout input:focus-visible { outline: 3px solid #b98606; outline-offset: 4px; }
+.moon-layout .btn-primary { background: #1e7816; border-color: #1e7816; }
+.moon-layout .btn-primary:hover { background: #194d14; border-color: #194d14; }
+.moon-layout .moon-section.padi-shell { margin: 0; padding: 0; }
+.moon-layout .padi-shell > .container { max-width: 1240px; }
+.moon-layout .padi-shell .moon-text > .moon-content-text > :last-child { margin-bottom: 0; }
+.padi-topbar { background: #194d14; color: #e8f2e6; font-size: 11px; letter-spacing: .08em; }
+.padi-topbar .padi-wrap { display: flex; justify-content: space-between; align-items: center; min-height: 33px; gap: 16px; }
+.padi-topbar a { color: #fff; text-decoration: none; font-size: 11px; letter-spacing: .02em; }
+.padi-wrap { max-width: 1192px; margin: 0 auto; padding: 0 24px; }
+.moon-layout .moon-header { background: #fff; border-bottom: 1px solid var(--padi-line); }
+.moon-layout .logo-wrapper { min-width: 0; }
+.moon-layout a.moon-logo.navbar-brand { position: relative; padding-left: 151px; margin-right: 24px; }
+.moon-layout a.moon-logo.navbar-brand::before {
+    content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    width: 119px; height: 50px; background: url("logo-bapanas.png") center/contain no-repeat;
+}
+.moon-layout a.moon-logo.navbar-brand::after {
+    content: ""; position: absolute; left: 135px; top: 5px; bottom: 5px; width: 1px; background: #dce4da;
+}
+.moon-layout .site-title { color: #194d14; font-size: 28px; font-weight: 800; letter-spacing: .03em; line-height: 1.1; }
+.moon-layout .site-tagline { font-size: 10px; color: #5c6c62; line-height: 1.5; margin-top: 5px; }
+.moon-layout #moon-header .site-tagline { font-size: 10px; white-space: normal; max-width: 190px; }
+.moon-layout .moon-header a { font-size: 13px; font-weight: 550; }
+.moon-layout .moon-header .container { max-width: 1240px; }
+.padi-hero { position: relative; background: #194d14; color: #fff; overflow: hidden; }
+.padi-hero::after { content: ""; position: absolute; right: -120px; top: -230px; width: 650px; height: 650px; border: 1px solid #ffffff14; border-radius: 50%; box-shadow: 0 0 0 100px #ffffff04, 0 0 0 200px #ffffff03; pointer-events: none; }
+.padi-hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 72px; padding-top: 74px; padding-bottom: 76px; align-items: center; position: relative; z-index: 1; }
+.padi-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 23px; }
+.padi-eyebrow::before { content: ""; display: inline-block; width: 24px; height: 3px; background: #ecbc33; }
+.moon-layout .padi-hero h1 { font-size: clamp(38px, 4.3vw, 59px); line-height: 1.08; letter-spacing: -.045em; color: #fff; font-weight: 650; margin: 0 0 25px; }
+.padi-hero h1 em { color: #ecbc33; font-style: normal; }
+.padi-hero-copy > p { color: #d8e7d5; font-size: 15px; line-height: 1.8; max-width: 490px; margin-bottom: 26px; }
+.padi-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.moon-layout .padi-button { display: inline-flex; align-items: center; justify-content: center; gap: 18px; padding: 14px 22px; border-radius: 7px; font-size: 13px; font-weight: 700; text-decoration: none; line-height: 1.3; transition: background .15s, transform .15s; }
+.moon-layout .padi-button:hover { transform: translateY(-2px); }
+.moon-layout .padi-button-gold { background: #ecbc33; color: #19370f; border: 1px solid #ecbc33; }
+.moon-layout .padi-button-gold:hover { background: #f5cb54; color: #19370f; }
+.moon-layout .padi-button-outline { color: #fff; border: 1px solid #ffffff55; }
+.moon-layout .padi-button-outline:hover { background: #ffffff12; color: #fff; }
+.padi-hero-note { display: flex; align-items: center; gap: 9px; margin-top: 25px; font-size: 11px; color: #d0dec9; }
+.padi-hero-note i { color: #ecbc33; }
+.padi-learning-card { background: #fff; border-radius: 16px; padding: 28px; color: #183127; box-shadow: 0 24px 60px #0c2b1860; position: relative; }
+.padi-hero-copy, .padi-learning-card { min-width: 0; }
+.padi-card-meta { display: flex; justify-content: space-between; align-items: center; color: #617166; font-size: 10px; font-weight: 700; letter-spacing: .1em; margin-bottom: 25px; }
+.padi-pill { color: #1e7816; background: #edf5e9; border: 1px solid #deebd8; padding: 4px 8px; border-radius: 5px; letter-spacing: .04em; }
+.moon-layout .padi-learning-card h2 { font-size: 25px; font-weight: 650; line-height: 1.2; margin: 0 0 20px; }
+.padi-focus { display: flex; align-items: center; gap: 13px; padding: 14px 0; border-top: 1px solid #e5ebe2; }
+.padi-icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border-radius: 9px; background: #f1f6ed; color: #1e7816; font-size: 17px; }
+.padi-focus:nth-of-type(3) .padi-icon { background: #fcf5de; color: #8b6500; }
+.padi-focus strong { display: block; font-size: 13px; font-weight: 650; margin-bottom: 3px; }
+.padi-focus small { color: #6a786c; font-size: 11px; }
+.padi-card-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; border-top: 1px solid #e5ebe2; padding-top: 19px; margin-top: 8px; color: #56695b; font-size: 10px; }
+.padi-card-bottom b { color: #1e7816; font-weight: 650; }
+.padi-quick { position: relative; background: #f5f8f1; border-bottom: 1px solid #e0e8da; }
+.padi-quick-grid { display: grid; grid-template-columns: repeat(3,1fr); padding-top: 22px; padding-bottom: 22px; }
+.moon-layout .padi-quick-link { display: flex; align-items: center; gap: 14px; padding: 10px 22px; color: #183127; border-right: 1px solid #dce5d8; text-decoration: none; }
+.padi-quick-link:first-child { padding-left: 0; }
+.padi-quick-link:last-child { border: 0; }
+.padi-quick-link strong { display: block; font-size: 13px; font-weight: 650; }
+.padi-quick-link small { display: block; color: #63715f; font-size: 11px; margin-top: 3px; }
+.padi-quick-link > .padi-arrow { margin-left: auto; color: #71876b; }
+.padi-quick-link:hover strong { color: #1e7816; text-decoration: underline; }
+.padi-section-intro { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding-top: 64px; padding-bottom: 12px; }
+.padi-section-intro .padi-eyebrow { color: #57724d; font-size: 10px; margin-bottom: 12px; }
+.moon-layout .padi-section-intro h2 { font-size: 32px; margin: 0; line-height: 1.25; }
+.padi-section-intro > p { color: #64715f; font-size: 13px; max-width: 340px; line-height: 1.7; margin: 0 0 3px; }
+.moon-layout#page-site-index .padi-native { padding: 14px 0 54px; }
+.moon-layout#page-site-index .padi-native #region-main { border: 0; padding: 0; }
+.moon-layout#page-site-index #page-header { display: none; }
+.moon-layout#page-site-index .course_category_tree .category > .info { background: #f8faf5; border: 1px solid #e0e8d9; border-radius: 8px; padding: 18px 20px; margin: 10px 0; }
+.moon-layout#page-site-index .course_category_tree .categoryname { font-size: 15px; font-weight: 650; }
+.moon-layout#page-site-index .course_category_tree .categoryname a { color: #194d14; }
+.moon-layout#page-site-index .courses.frontpage-course-list-all .coursebox { border: 1px solid #e0e8d9; border-radius: 10px; margin-bottom: 16px; padding: 22px; }
+.moon-layout#page-site-index #frontpage-category-names h2,
+.moon-layout#page-site-index #site-news-forum h2 { font-size: 21px; margin-bottom: 20px; }
+.moon-layout#page-site-index .simplesearchform { margin: 18px 0 32px; }
+.moon-layout#page-site-index .alert-info { background: #f1f6ee; color: #46583e; border: 1px solid #dce8d4; border-radius: 8px; font-size: 13px; }
+.padi-journey { background: #f5f8f1; border-top: 1px solid #e0e8d9; padding: 56px 0 62px; }
+.padi-journey-title { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 30px; }
+.moon-layout .padi-journey h2 { font-size: 28px; margin: 0; }
+.padi-journey-title p { margin: 0; color: #64715f; font-size: 12px; }
+.padi-step-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 36px; }
+.padi-step { border-top: 2px solid #cad9c2; padding-top: 20px; }
+.padi-step-number { color: #85977c; font-size: 12px; letter-spacing: .15em; margin-bottom: 16px; }
+.moon-layout .padi-step h3 { font-size: 17px; letter-spacing: -.02em; margin: 0 0 10px; }
+.padi-step p { color: #65745f; font-size: 12px; line-height: 1.8; margin: 0; max-width: 300px; }
+.padi-footer { background: #153c12; color: #dbe7d6; padding: 45px 0 0; border-top: 4px solid #ecbc33; }
+.padi-footer-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr; gap: 60px; padding-bottom: 35px; }
+.padi-footer .padi-footer-brand { color: #fff; font-size: 26px; font-weight: 800; letter-spacing: .04em; margin-bottom: 6px; }
+.moon-layout .padi-footer h3 { color: #e8f1e3; font-size: 11px; letter-spacing: .07em; font-weight: 650; text-transform: uppercase; margin: 0 0 16px; }
+.padi-footer p { font-size: 12px; line-height: 1.8; color: #b8ceb0; max-width: 320px; }
+.moon-layout .padi-footer a { display: block; width: fit-content; color: #c4d8bc; font-size: 12px; text-decoration: none; margin-bottom: 9px; }
+.moon-layout .padi-footer a:hover { color: #ecbc33; text-decoration: underline; }
+.padi-footer-bottom { border-top: 1px solid #ffffff20; display: flex; justify-content: space-between; gap: 20px; padding: 18px 0; color: #a7c19d; font-size: 10px; }
+.moon-layout .card { border-radius: 10px; border-color: #e0e8d9; }
+.moon-layout .form-control { border-radius: 6px; }
+.moon-layout .login-container { border-radius: 16px; border: 1px solid #dfe8d8; box-shadow: 0 16px 60px #194d1414; }
+.moon-layout .login-container h1 { color: #194d14; }
+.moon-layout .footer-content-debugging { font-size: 12px; }
+.moon-layout.pagelayout-admin { background: #f5f7f2; }
+.moon-layout.pagelayout-admin .padi-shell .container { max-width: 1380px; }
+.moon-layout.pagelayout-admin .padi-admin-navigation { background: #fff; border-bottom: 1px solid #dfe7d9; }
+.moon-layout.pagelayout-admin .padi-admin-navigation .nav-link { padding: 16px 15px; font-size: 13px; border-radius: 0; }
+.moon-layout.pagelayout-admin .padi-admin-navigation .nav-link.active { color: #194d14; font-weight: 700; background: #f1f6ed; box-shadow: inset 0 -3px #1e7816; }
+.moon-layout.pagelayout-admin .padi-admin-content { padding: 30px 0 45px; }
+.moon-layout.pagelayout-admin #region-main { background: #fff; border: 1px solid #dfe7d9; border-radius: 12px; padding: 28px; }
+.moon-layout.pagelayout-admin #region-main .tab-content > .tab-pane > .container-fluid { padding: 0; }
+.moon-layout.pagelayout-admin #region-main .tab-content .row { padding: 13px 0; }
+.moon-layout.pagelayout-admin #region-main .tab-content h4 { font-size: 17px; margin-top: 5px; }
+.moon-layout.pagelayout-admin #region-main .tab-content ul { margin: 0; }
+.moon-layout.pagelayout-admin #region-main .tab-content li { margin-bottom: 6px; font-size: 14px; }
+.moon-layout.pagelayout-admin #region-main .tab-content hr { border-color: #e0e8d9; opacity: 1; margin: 17px 0; }
+.moon-layout.pagelayout-admin #page-header { padding: 18px 24px; }
+.moon-layout.pagelayout-admin #page-header h1 { font-size: 28px; }
+.moon-layout.pagelayout-admin .settingsform .form-item { border-bottom: 1px solid #edf1e9; padding-bottom: 18px; }
+@media (max-width: 767px) {
+    .moon-layout.pagelayout-admin .padi-admin-navigation .nav { flex-wrap: nowrap; overflow-x: auto; }
+    .moon-layout.pagelayout-admin .padi-admin-navigation .nav-link { white-space: nowrap; padding: 13px 11px; }
+    .moon-layout.pagelayout-admin .padi-admin-content { padding: 18px 0 28px; }
+    .moon-layout.pagelayout-admin #region-main { padding: 18px; }
+}
+body#page-login-index { background: #f2f6ee; font-family: "Segoe UI", Arial, sans-serif; }
+#page-login-index .login-container { border-top: 5px solid #ecbc33; border-radius: 14px; box-shadow: 0 18px 60px #194d1420; }
+#page-login-index #loginlogo img { max-height: 85px; width: auto; object-fit: contain; }
+#page-login-index .login-logo::after { content: "PADI · Pangan Akademi Digital Indonesia"; display: block; margin-top: 14px; color: #194d14; font-size: 14px; font-weight: 650; text-align: center; }
+@media (max-width: 1100px) {
+    .padi-hero-grid { gap: 38px; }
+    .moon-layout a.moon-logo.navbar-brand { padding-left: 121px; }
+    .moon-layout a.moon-logo.navbar-brand::before { width: 96px; }
+    .moon-layout a.moon-logo.navbar-brand::after { left: 108px; }
+    .moon-layout .site-tagline { max-width: 135px; }
+}
+@media (max-width: 767px) {
+    .padi-wrap { padding-left: 22px; padding-right: 22px; }
+    .padi-topbar .padi-wrap { min-height: 30px; }
+    .padi-topbar a { display: none; }
+    .padi-topbar { font-size: 9px; letter-spacing: .07em; }
+    .moon-layout .site-title { font-size: 24px; }
+    .moon-layout .site-tagline { font-size: 9px; }
+    .moon-layout #moon-header .site-tagline { font-size: 9px; max-width: 115px; line-height: 1.4; }
+    .moon-layout a.moon-logo.navbar-brand { padding-left: 109px; margin-right: 0; }
+    .moon-layout a.moon-logo.navbar-brand::before { width: 87px; height: 40px; }
+    .moon-layout a.moon-logo.navbar-brand::after { left: 98px; }
+    .padi-hero-grid { grid-template-columns: 1fr; gap: 34px; padding-top: 43px; padding-bottom: 42px; }
+    .moon-layout .padi-hero h1 { font-size: 42px; max-width: 390px; }
+    .padi-hero-copy > p { font-size: 13px; }
+    .padi-eyebrow { font-size: 9px; }
+    .padi-learning-card { padding: 23px; }
+    .padi-quick-grid { grid-template-columns: 1fr; padding-top: 10px; padding-bottom: 10px; }
+    .moon-layout .padi-quick-link { padding: 15px 0; border-right: 0; border-bottom: 1px solid #dce5d8; }
+    .padi-section-intro { align-items: start; flex-direction: column; gap: 14px; padding-top: 40px; }
+    .moon-layout .padi-section-intro h2 { font-size: 28px; }
+    .padi-section-intro > p { max-width: none; }
+    .padi-journey { padding: 40px 0; }
+    .padi-journey-title { display: block; }
+    .padi-journey-title p { margin-top: 13px; }
+    .padi-step-grid { grid-template-columns: 1fr; gap: 25px; }
+    .padi-step p { max-width: none; }
+    .padi-step-number { margin-bottom: 10px; }
+    .padi-footer-grid { grid-template-columns: 1fr 1fr; gap: 25px; }
+    .padi-footer-grid > :first-child { grid-column: 1 / -1; }
+    .padi-footer-bottom { flex-direction: column; gap: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .moon-layout .padi-button { transition: none; }
+    .moon-layout .padi-button:hover { transform: none; }
+}

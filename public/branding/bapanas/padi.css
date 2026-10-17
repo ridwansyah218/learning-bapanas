@@ -1,0 +1,628 @@
+/* PADI / Bapanas. Official logo colours: Peraturan Bapanas 01/2022. */
+body.moon-layout {
+    --padi-green: var(--bs-primary);
+    --padi-forest: var(--bs-secondary);
+    --padi-gold: var(--bs-yellow);
+    --padi-ink: var(--bs-body-color);
+    --padi-muted: color-mix(in srgb, var(--bs-body-color) 65%, var(--bs-body-bg));
+    --padi-line: color-mix(in srgb, var(--bs-primary) 14%, var(--bs-body-bg));
+    overflow-x: clip;
+}
+
+
+.moon-layout a:focus-visible, .moon-layout button:focus-visible,
+.moon-layout input:focus-visible { outline: 3px solid var(--moon-focus-outline-color, var(--bs-primary)); outline-offset: 4px; }
+.moon-layout a:not(.btn):focus {
+    background-color: var(--moon-link-focus-background, color-mix(in srgb, var(--bs-primary) 10%, var(--bs-body-bg))) !important;
+    box-shadow: none;
+}
+.moon-layout a:not(.btn):focus-visible {
+    outline: 2px solid var(--moon-focus-outline-color, var(--bs-primary));
+    outline-offset: 3px;
+}
+
+
+.moon-layout .moon-section.padi-shell { margin: 0; padding: 0; }
+.moon-layout .padi-shell > .container { max-width: 1240px; }
+.moon-layout .padi-shell .moon-text > .moon-content-text > :last-child { margin-bottom: 0; }
+.padi-topbar { background: var(--padi-forest); color: #e8f2e6; font-size: 11px; letter-spacing: .08em; }
+.padi-topbar .padi-wrap { display: flex; justify-content: space-between; align-items: center; min-height: 33px; gap: 16px; }
+.padi-topbar a { color: #fff; text-decoration: none; font-size: 11px; letter-spacing: .02em; }
+.padi-wrap { max-width: 1192px; margin: 0 auto; padding: 0 24px; }
+.moon-layout .moon-header { border-bottom: 1px solid var(--padi-line); }
+.moon-layout .header-left-section { min-width: 0; }
+.moon-layout .padi-auth-actions { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; white-space: nowrap; font-size: 14px; }
+.moon-layout .padi-guest-badge { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--padi-forest); background: color-mix(in srgb, var(--bs-primary) 8%, var(--bs-body-bg)); }
+.moon-layout .padi-auth-actions .padi-login-link { padding: 8px 14px; border-radius: 8px; background: var(--bs-primary); color: var(--bs-body-bg); text-decoration: none; font-weight: 600; }
+.moon-layout .padi-auth-actions .padi-login-link:hover { background: var(--bs-secondary); }
+.moon-layout .padi-auth-actions .padi-guest-logout { padding: 8px 10px; color: var(--bs-link-color); text-decoration: none; }
+.moon-layout .padi-auth-actions .padi-guest-logout:hover { text-decoration: underline; }
+.moon-layout .header-right-section #usernavigation { align-items: center; gap: 12px; }
+.moon-layout .header-right-section .usermenu-container { flex-shrink: 0; }
+.moon-layout .header-right-section .login-languagemenu { font-size: 13px; white-space: nowrap; }
+.moon-layout .logo-wrapper { min-width: 0; max-width: 100%; flex-shrink: 1; }
+.moon-layout .moon-logo-image.navbar-brand { min-width: 0; max-width: 100%; }
+.moon-layout .moon-logo-image img { width: 100%; height: auto; }
+
+.moon-layout .moon-header .container { max-width: 1240px; }
+.padi-hero { position: relative; background: var(--padi-forest); color: #fff; overflow: hidden; }
+.padi-hero::after { content: ""; position: absolute; right: -120px; top: -230px; width: 650px; height: 650px; border: 1px solid #ffffff14; border-radius: 50%; box-shadow: 0 0 0 100px #ffffff04, 0 0 0 200px #ffffff03; pointer-events: none; }
+.padi-hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 72px; padding-top: 74px; padding-bottom: 76px; align-items: center; position: relative; z-index: 1; }
+.padi-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 23px; }
+.padi-eyebrow::before { content: ""; display: inline-block; width: 24px; height: 3px; background: var(--padi-gold); }:where(.moon-layout .padi-hero) h1 { font-size: clamp(38px, 4.3vw, 59px); line-height: 1.08; letter-spacing: -.045em; color: #fff; font-weight: 650; margin: 0 0 25px; }:where(.padi-hero h1 em) { color: var(--padi-gold); font-style: normal; }
+.padi-hero-copy > p { color: #d8e7d5; font-size: 15px; line-height: 1.8; max-width: 490px; margin-bottom: 26px; }
+.padi-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.moon-layout .padi-button { display: inline-flex; align-items: center; justify-content: center; gap: 18px; padding: 14px 22px; border-radius: 7px; font-size: 13px; font-weight: 700; text-decoration: none; line-height: 1.3; transition: background .15s, transform .15s; }
+.moon-layout .padi-button:hover { transform: translateY(-2px); }
+.moon-layout .padi-button-gold { background: var(--padi-gold); color: color-mix(in srgb, var(--padi-forest) 70%, #000); border: 1px solid var(--padi-gold); }
+.moon-layout .padi-button-gold:hover { background: color-mix(in srgb, var(--padi-gold) 80%, #fff); color: color-mix(in srgb, var(--padi-forest) 70%, #000); }
+.moon-layout .padi-button-outline { color: #fff; border: 1px solid #ffffff55; }
+.moon-layout .padi-button-outline:hover { background: #ffffff12; color: #fff; }
+.padi-hero-note { display: flex; align-items: center; gap: 9px; margin-top: 25px; font-size: 11px; color: #d0dec9; }
+.padi-hero-note i { color: var(--padi-gold); }
+.padi-learning-card { background: var(--bs-body-bg); border-radius: 16px; padding: 28px; color: var(--padi-ink); box-shadow: 0 24px 60px #0c2b1860; position: relative; }
+.padi-hero-copy, .padi-learning-card { min-width: 0; }
+.padi-card-meta { display: flex; justify-content: space-between; align-items: center; color: #617166; font-size: 10px; font-weight: 700; letter-spacing: .1em; margin-bottom: 25px; }
+.padi-pill { color: var(--padi-green); background: color-mix(in srgb, var(--padi-green) 8%, var(--bs-body-bg)); border: 1px solid #deebd8; padding: 4px 8px; border-radius: 5px; letter-spacing: .04em; }:where(.moon-layout .padi-learning-card) h2 { font-size: 25px; font-weight: 650; line-height: 1.2; margin: 0 0 20px; }
+.padi-focus { display: flex; align-items: center; gap: 13px; padding: 14px 0; border-top: 1px solid #e5ebe2; }
+.padi-icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border-radius: 9px; background: color-mix(in srgb, var(--padi-green) 7%, var(--bs-body-bg)); color: var(--padi-green); font-size: 17px; }
+.padi-focus:nth-of-type(3) .padi-icon { background: color-mix(in srgb, var(--padi-gold) 16%, var(--bs-body-bg)); color: color-mix(in srgb, var(--padi-gold) 45%, #000); }
+.padi-focus strong { display: block; font-size: 13px; font-weight: 650; margin-bottom: 3px; }
+.padi-focus small { color: #6a786c; font-size: 11px; }
+.padi-card-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; border-top: 1px solid #e5ebe2; padding-top: 19px; margin-top: 8px; color: #56695b; font-size: 10px; }
+.padi-card-bottom b { color: var(--padi-green); font-weight: 650; }
+.padi-quick { position: relative; background: color-mix(in srgb, var(--padi-green) 5%, var(--bs-body-bg)); border-bottom: 1px solid var(--padi-line); }
+.padi-quick-grid { display: grid; grid-template-columns: repeat(3,1fr); padding-top: 22px; padding-bottom: 22px; }
+.moon-layout .padi-quick-link { display: flex; align-items: center; gap: 14px; padding: 10px 22px; color: var(--padi-ink); border-right: 1px solid var(--padi-line); text-decoration: none; }
+.padi-quick-link:first-child { padding-left: 0; }
+.padi-quick-link:last-child { border: 0; }
+.padi-quick-link strong { display: block; font-size: 13px; font-weight: 650; }
+.padi-quick-link small { display: block; color: #63715f; font-size: 11px; margin-top: 3px; }
+.padi-quick-link > .padi-arrow { margin-left: auto; color: #71876b; }
+.padi-quick-link:hover strong { color: var(--padi-green); text-decoration: underline; }
+.padi-section-intro { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding-top: 64px; padding-bottom: 12px; }
+.padi-section-intro .padi-eyebrow { color: #57724d; font-size: 10px; margin-bottom: 12px; }:where(.moon-layout .padi-section-intro) h2 { font-size: 32px; margin: 0; line-height: 1.25; }
+.padi-section-intro > p { color: #64715f; font-size: 13px; max-width: 340px; line-height: 1.7; margin: 0 0 3px; }
+.moon-layout#page-site-index .padi-native { padding: 14px 0 54px; }
+.moon-layout#page-site-index .padi-native #region-main { border: 0; padding: 0; }
+.moon-layout#page-site-index #page-header { display: none; }
+/* Native Moodle course catalogue: responsive cards, without changing course data. */
+.moon-layout#page-site-index .padi-course-filters { width: 100%; }
+.moon-layout#page-site-index .padi-course-filters .simplesearchform { margin: 0; max-width: 100%; }
+.moon-layout#page-site-index .padi-course-filters .form-select,
+.moon-layout#page-site-index .padi-course-filters .form-control { min-height: 46px; border-color: var(--padi-line); }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) {
+    padding: 18px;
+    margin: 12px 0 24px;
+    border: 1px solid var(--padi-line);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--padi-green) 4%, var(--bs-body-bg));
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) > .d-flex { flex-wrap: wrap; gap: 16px; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) .navitem { margin: 0; padding: 0; min-width: 0; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category) :is(#action_bar, .padi-course-filters) .urlselect { width: fit-content !important; max-width: 100%; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category) :is(#action_bar, .padi-course-filters) select.urlselect { field-sizing: content; width: auto !important; min-width: 0; max-width: 100%; }
+@media (max-width: 575px) {
+    .moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) .navitem { max-width: 100%; }
+    .moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) .navitem:has(.simplesearchform) { width: 100%; }
+    .moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) .simplesearchform { width: 100%; }
+}
+.moon-layout:is(#page-course-index, #page-course-index-category, #page-course-search) #region-main {
+    border: 0;
+    padding: 0;
+}
+.moon-layout:is(#page-course-index, #page-course-index-category, #page-course-search) #region-main .simplesearchform {
+    max-width: 100%;
+    margin: 0;
+}
+.moon-layout:is(#page-course-index, #page-course-index-category, #page-course-search) #region-main .form-select,
+.moon-layout:is(#page-course-index, #page-course-index-category, #page-course-search) #region-main .simplesearchform .form-control {
+    min-height: 46px;
+    border-color: var(--padi-line);
+}
+.moon-layout:is(#page-course-index, #page-course-index-category, #page-course-search) .courses { margin-top: 28px; margin-bottom: 32px; }
+.moon-layout:is(#page-course-index, #page-course-index-category, #page-course-search) .coursecat { margin-top: 12px; font-size: 13px; line-height: 1.6; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursebox {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--padi-line);
+    border-radius: 16px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: var(--bs-body-bg);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 4%);
+    transition: box-shadow .2s ease, border-color .2s ease;
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursebox:hover {
+    border-color: var(--padi-green);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 9%);
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursebox > .content,
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursebox > .content > .d-flex { display: contents !important; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .courseimage {
+    order: 0;
+    width: 100%;
+    float: none;
+    margin: 0;
+    background: color-mix(in srgb, var(--padi-green) 8%, var(--bs-body-bg));
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .courseimage img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursebox > .info { order: 1; padding: 22px 22px 10px; margin: 0; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursename { float: none; width: auto; margin: 0; font-size: 20px; font-weight: 700; line-height: 1.4; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursename a { color: var(--padi-forest); background: none; padding: 0; overflow-wrap: anywhere; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursename a:focus-visible { outline: 2px solid var(--moon-focus-outline-color, var(--bs-primary)); outline-offset: 4px; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .content .flex-grow-1 { order: 2; padding: 0 22px 22px; min-width: 0; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .summary { float: none; width: auto; margin: 0; color: var(--padi-muted); font-size: 15px; line-height: 1.7; overflow-wrap: anywhere; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .summary p:last-child { margin-bottom: 0; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .teachers { float: none; width: auto; margin: 18px 0 0; padding: 14px 0 0; border-top: 1px solid var(--padi-line); font-size: 13px; line-height: 1.6; list-style: none; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursebox::after { display: none; }
+@media (max-width: 991px) { .moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; } }
+@media (max-width: 575px) { .moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+@media (prefers-reduced-motion: reduce) { .moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses .coursebox { transition: none; } }
+:where(.moon-layout#page-site-index #site-news-forum) h2 { font-size: 21px; margin-bottom: 20px; }
+.moon-layout#page-site-index .simplesearchform { margin: 18px 0 32px; }
+.moon-layout#page-site-index .alert-info { background: color-mix(in srgb, var(--padi-green) 7%, var(--bs-body-bg)); color: #46583e; border: 1px solid #dce8d4; border-radius: 8px; font-size: 13px; }
+.padi-journey { background: color-mix(in srgb, var(--padi-green) 5%, var(--bs-body-bg)); border-top: 1px solid var(--padi-line); padding: 56px 0 62px; }
+.padi-journey-title { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 30px; }:where(.moon-layout .padi-journey) h2 { font-size: 28px; margin: 0; }
+.padi-journey-title p { margin: 0; color: #64715f; font-size: 12px; }
+.padi-step-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 36px; }
+.padi-step { border-top: 2px solid #cad9c2; padding-top: 20px; }
+.padi-step-number { color: #85977c; font-size: 12px; letter-spacing: .15em; margin-bottom: 16px; }:where(.moon-layout .padi-step) h3 { font-size: 17px; letter-spacing: -.02em; margin: 0 0 10px; }
+.padi-step p { color: #65745f; font-size: 12px; line-height: 1.8; margin: 0; max-width: 300px; }
+.padi-footer { background: color-mix(in srgb, var(--padi-forest) 85%, #000); color: #dbe7d6; padding: 45px 0 0; border-top: 4px solid var(--padi-gold); }
+.padi-footer-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr; gap: 60px; padding-bottom: 35px; }
+.padi-footer .padi-footer-brand { color: #fff; font-size: 26px; font-weight: 800; letter-spacing: .04em; margin-bottom: 6px; }:where(.moon-layout .padi-footer) h3 { color: #e8f1e3; font-size: 11px; letter-spacing: .07em; font-weight: 650; text-transform: uppercase; margin: 0 0 16px; }
+.padi-footer p { font-size: 12px; line-height: 1.8; color: #b8ceb0; max-width: 320px; }
+.moon-layout .padi-footer a { display: block; width: fit-content; color: #c4d8bc; font-size: 12px; text-decoration: none; margin-bottom: 9px; }
+.moon-layout .padi-footer a:hover { color: var(--padi-gold); text-decoration: underline; }
+.padi-footer-bottom { border-top: 1px solid #ffffff20; display: flex; justify-content: space-between; gap: 20px; padding: 18px 0; color: #a7c19d; font-size: 10px; }
+.moon-layout .login-container { border-radius: 16px; border: 1px solid #dfe8d8; box-shadow: 0 16px 60px #194d1414; }:where(.moon-layout .login-container) h1 { color: var(--padi-forest); }
+.moon-layout .footer-content-debugging { font-size: 12px; }
+.moon-layout.pagelayout-admin { background: color-mix(in srgb, var(--padi-green) 4%, var(--bs-body-bg)); }
+.moon-layout.pagelayout-admin .padi-shell .container { max-width: 1380px; }
+.moon-layout.pagelayout-admin .padi-admin-navigation { background: var(--bs-body-bg); border-bottom: 1px solid var(--padi-line); }
+.moon-layout.pagelayout-admin .padi-admin-navigation .nav-link { padding: 16px 15px; font-size: 13px; border-radius: 0; }
+.moon-layout.pagelayout-admin .padi-admin-navigation .nav-link.active { color: var(--padi-forest); font-weight: 700; background: color-mix(in srgb, var(--padi-green) 7%, var(--bs-body-bg)); box-shadow: inset 0 -3px var(--padi-green); }
+.moon-layout.pagelayout-admin .padi-admin-content { padding: 30px 0 45px; }
+.moon-layout.pagelayout-admin #region-main { background: var(--bs-body-bg); border: 1px solid var(--padi-line); border-radius: 12px; padding: 28px; }
+.moon-layout.pagelayout-admin #region-main .tab-content > .tab-pane > .container-fluid { padding: 0; }
+.moon-layout.pagelayout-admin #region-main .tab-content .row { padding: 13px 0; }:where(.moon-layout.pagelayout-admin #region-main .tab-content) h4 { font-size: 17px; margin-top: 5px; }
+.moon-layout.pagelayout-admin #region-main .tab-content ul { margin: 0; }
+.moon-layout.pagelayout-admin #region-main .tab-content li { margin-bottom: 6px; font-size: 14px; }
+.moon-layout.pagelayout-admin #region-main .tab-content hr { border-color: var(--padi-line); opacity: 1; margin: 17px 0; }
+.moon-layout.pagelayout-admin #page-header { padding: 18px 24px; }:where(.moon-layout.pagelayout-admin #page-header) h1 { font-size: 28px; }
+.moon-layout.pagelayout-admin .settingsform .form-item { border-bottom: 1px solid #edf1e9; padding-bottom: 18px; }
+@media (max-width: 767px) {
+    .moon-layout .header-left-section { flex: 1 1 0%; }
+    .moon-layout .moon-logo-image.navbar-brand { width: 100%; margin-right: 0; }
+    .moon-layout.pagelayout-admin .padi-admin-navigation .nav { flex-wrap: nowrap; overflow-x: auto; }
+    .moon-layout.pagelayout-admin .padi-admin-navigation .nav-link { white-space: nowrap; padding: 13px 11px; }
+    .moon-layout.pagelayout-admin .padi-admin-content { padding: 18px 0 28px; }
+    .moon-layout.pagelayout-admin #region-main { padding: 18px; }
+}
+body#page-login-index { background: color-mix(in srgb, var(--bs-primary) 5%, var(--bs-body-bg));  }
+#page-login-index .login-container { border-top: 5px solid var(--padi-gold); border-radius: 14px; box-shadow: 0 18px 60px #194d1420; }
+#page-login-index #loginlogo img { max-height: 85px; width: auto; object-fit: contain; }
+/* PADI login: native Moodle form inside a branded, responsive shell. */
+.moon-layout:is(#page-login-index, #page-login-forgot_password) .moon-section:has(.padi-login-shell) { padding: 16px 0 !important; min-height: 100svh; display: flex; align-items: center; }
+.moon-layout:is(#page-login-index, #page-login-forgot_password) .moon-section:has(.padi-login-shell) > .container { width: 100%; }
+.moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-form { border: 0 !important; outline: 0; box-shadow: none !important; }
+.moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-password-form { min-width: 0; padding: 28px 32px; }
+.moon-layout#page-login-forgot_password .padi-password-form h1 { font-size: 24px; color: var(--padi-forest); margin-bottom: 16px; }
+.moon-layout#page-login-forgot_password .padi-password-form .generalbox { width: 100%; padding: 0; border: 0; font-size: 14px; line-height: 1.7; color: var(--padi-muted); }
+.moon-layout#page-login-forgot_password .padi-password-form .mform fieldset { margin: 16px 0; padding: 0; border: 0; }
+.moon-layout#page-login-forgot_password .padi-password-form legend { font-size: 17px; }
+.moon-layout#page-login-forgot_password .padi-password-form .fitem { display: block; margin: 0 0 12px; }
+.moon-layout#page-login-forgot_password .padi-password-form .fitem > div { width: 100%; max-width: 100%; padding: 0; }
+.moon-layout#page-login-forgot_password .padi-password-form .form-control { width: 100%; max-width: 100%; min-height: 44px; }
+.moon-layout#page-login-forgot_password .padi-back-login { display: inline-block; margin-top: 16px; font-size: 14px; }
+@media (min-width: 768px) {
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-shell { max-width: 960px; margin: 16px auto; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-brand { padding: 32px; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-message { padding: 24px 0; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-form { padding: 28px 32px; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-welcome h1 { font-size: 24px; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-welcome p { margin-bottom: 14px; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-form #loginlogo { margin-bottom: 16px; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-form #loginlogo img { max-height: 40px; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-form .login-divider { margin: 14px 0; }
+    .moon-layout:is(#page-login-index, #page-login-forgot_password) .padi-login-form .btn:not(.toggle-sensitive-btn) { margin-top: 0; padding: 8px 16px; }
+}
+body:is(#page-login-index, #page-login-forgot_password) { background: color-mix(in srgb, var(--bs-primary) 5%, var(--bs-body-bg)); }
+body:is(#page-login-index, #page-login-forgot_password) #region-main { background: transparent; border: 0; padding: 0; }
+body:is(#page-login-index, #page-login-forgot_password) { background: color-mix(in srgb, var(--bs-primary) 5%, var(--bs-body-bg)); }
+:is(#page-login-index, #page-login-forgot_password) #region-main { border: 0; padding: 0; background: transparent; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-shell { display: grid; grid-template-columns: 1fr 1fr; max-width: 1000px; margin: 40px auto; border: 1px solid var(--padi-line); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgb(0 0 0 / 8%); background: var(--bs-body-bg); }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-brand { padding: 48px; color: #fff; background: var(--padi-forest); display: flex; flex-direction: column; border-top: 5px solid var(--padi-gold); }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-home { color: #fff; font-size: 36px; font-weight: 800; text-decoration: none; line-height: 1.1; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-home span, :is(#page-login-index, #page-login-forgot_password) .padi-login-message h2 span { color: var(--padi-gold); }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-subtitle { font-size: 13px; margin: 10px 0 0; color: #e0eadc; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-message { margin: auto 0; padding: 58px 0; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-eyebrow { font-size: 11px; letter-spacing: .14em; color: #e0eadc; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-message h2 { font-size: clamp(27px, 3vw, 38px); font-weight: 700; line-height: 1.2; color: #fff; margin: 18px 0 24px; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-message > p:last-child { max-width: 310px; font-size: 15px; line-height: 1.8; color: #e0eadc; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-signature { font-size: 12px; margin: 0; color: #e0eadc; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form { min-width: 0; width: 100%; max-width: none; margin: 0; padding: 40px; border: 0; border-radius: 0; box-shadow: none; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-welcome h1 { font-size: 27px; font-weight: 700; color: var(--padi-forest); margin: 0 0 10px; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-welcome p { font-size: 14px; color: var(--padi-muted); line-height: 1.7; margin-bottom: 24px; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form #loginlogo { margin-bottom: 24px; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form #loginlogo img { max-height: 52px; max-width: 220px; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form .form-control { min-height: 48px; font-size: 16px; border-radius: 9px; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form .btn { min-height: 44px; font-size: 14px; border-radius: 9px; white-space: normal; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form #loginbtn { width: 100%; font-size: 16px; font-weight: 600; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form .login-form-forgotpassword { font-size: 14px; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form h2.login-heading { font-size: 15px; line-height: 1.6; font-weight: 400; color: var(--padi-muted); }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form .login-divider { margin: 24px 0; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form .d-flex { flex-wrap: wrap; gap: 12px; font-size: 13px; }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form #loginguestbtn { color: var(--padi-forest); background: transparent; border-color: var(--padi-line); }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form #loginguestbtn:hover { background: color-mix(in srgb, var(--padi-green) 7%, var(--bs-body-bg)); }
+:is(#page-login-index, #page-login-forgot_password) .padi-login-form button[data-modal="alert"] { min-height: 32px; padding: 4px 0; color: var(--padi-muted); background: transparent; border: 0; text-decoration: underline; }
+@media (max-width: 767px) {
+    :is(#page-login-index, #page-login-forgot_password) .padi-login-shell { grid-template-columns: minmax(0, 1fr); margin: 16px auto; border-radius: 16px; }
+    :is(#page-login-index, #page-login-forgot_password) .padi-login-brand { padding: 28px; }
+    :is(#page-login-index, #page-login-forgot_password) .padi-login-message { padding: 24px 0 0; }
+    :is(#page-login-index, #page-login-forgot_password) .padi-login-message h2 { font-size: 28px; margin: 12px 0; }
+    :is(#page-login-index, #page-login-forgot_password) .padi-login-message > p:last-child { margin-bottom: 0; font-size: 13px; }
+    :is(#page-login-index, #page-login-forgot_password) .padi-login-signature { display: none; }
+    :is(#page-login-index, #page-login-forgot_password) .padi-login-form { padding: 28px 24px; }
+}
+
+@media (max-width: 1100px) {
+    .padi-hero-grid { gap: 38px; }
+}
+@media (max-width: 767px) {
+    .padi-wrap { padding-left: 22px; padding-right: 22px; }
+    .padi-topbar .padi-wrap { min-height: 30px; }
+    .padi-topbar a { display: none; }
+    .padi-topbar { font-size: 9px; letter-spacing: .07em; }
+    .padi-hero-grid { grid-template-columns: 1fr; gap: 34px; padding-top: 43px; padding-bottom: 42px; }:where(.moon-layout .padi-hero) h1 { font-size: 42px; max-width: 390px; }
+    .padi-hero-copy > p { font-size: 13px; }
+    .padi-eyebrow { font-size: 9px; }
+    .padi-learning-card { padding: 23px; }
+    .padi-quick-grid { grid-template-columns: 1fr; padding-top: 10px; padding-bottom: 10px; }
+    .moon-layout .padi-quick-link { padding: 15px 0; border-right: 0; border-bottom: 1px solid var(--padi-line); }
+    .padi-section-intro { align-items: start; flex-direction: column; gap: 14px; padding-top: 40px; }:where(.moon-layout .padi-section-intro) h2 { font-size: 28px; }
+    .padi-section-intro > p { max-width: none; }
+    .padi-journey { padding: 40px 0; }
+    .padi-journey-title { display: block; }
+    .padi-journey-title p { margin-top: 13px; }
+    .padi-step-grid { grid-template-columns: 1fr; gap: 25px; }
+    .padi-step p { max-width: none; }
+    .padi-step-number { margin-bottom: 10px; }
+    .padi-footer-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 25px; }
+    .padi-footer-grid > :first-child { grid-column: 1 / -1; }
+    .padi-footer-bottom { flex-direction: column; gap: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .moon-layout .padi-button { transition: none; }
+    .moon-layout .padi-button:hover { transform: none; }
+}
+
+.padi-footer-grid > div { min-width: 0; overflow-wrap: anywhere; }
+
+/* Catalogue "more" link and pagination: full row under the course grid, not a grid cell. */
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses > .paging {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 0;
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses > .paging-morelink .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 26px; border-radius: 8px; font-size: 14px; font-weight: 700;
+    color: var(--padi-forest); background: var(--bs-body-bg); border: 1px solid var(--padi-green);
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses > .paging-morelink .btn::after {
+    content: "\2192"; transition: transform .15s;
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses > .paging-morelink .btn:hover {
+    color: var(--bs-body-bg); background: var(--padi-green);
+}
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) .courses > .paging-morelink .btn:hover::after { transform: translateX(3px); }
+.moon-layout#page-site-index #frontpage-available-course-list { margin-bottom: 48px; }
+
+/* Native filter bar (category select + course search): search takes the remaining width. */
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) > .d-flex { align-items: center; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) .navitem:has(.simplesearchform) { flex: 1 1 280px; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) .simplesearchform,
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) .simplesearchform .input-group { width: 100%; max-width: none; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) select.urlselect { min-width: 220px; }
+.moon-layout:is(#page-site-index, #page-course-index, #page-course-index-category, #page-course-search) :is(#action_bar, .padi-course-filters) .search-icon { min-width: 52px; }
+.moon-layout#page-site-index .padi-course-filters { margin-top: 0; }
+
+/* Catalogue page header (Moon "Full Header" element in the coursecategory layout). */
+.moon-layout .moon-section.padi-page-head {
+    background: color-mix(in srgb, var(--padi-green) 5%, var(--bs-body-bg));
+    border-bottom: 1px solid var(--padi-line);
+    padding: 40px 0 32px;
+}
+.moon-layout .padi-page-head #page-header { margin: 0; padding: 0; max-width: none; }
+.moon-layout .padi-page-head #page-navbar:empty, .moon-layout .padi-page-head #page-navbar:not(:has(li)) { display: none; }
+.moon-layout .padi-page-head .breadcrumb { margin: 0 0 14px; padding: 0; background: none; font-size: 13px; }
+.moon-layout .padi-page-head .breadcrumb a { color: var(--padi-green); }
+.moon-layout .padi-page-head .page-context-header { margin: 0 !important; }
+.moon-layout .padi-page-head .page-header-headings h1 { color: var(--padi-forest); font-size: clamp(28px, 3vw, 36px); letter-spacing: -.02em; }
+.moon-layout .padi-page-head .page-header-headings h1::before {
+    content: ""; display: block; width: 28px; height: 3px; margin-bottom: 14px; background: var(--padi-gold);
+}
+.moon-layout:is(#page-course-index, #page-course-index-category) .padi-native .moon-main-content { padding-top: 8px !important; }
+.moon-layout:is(#page-course-index, #page-course-index-category) .generalbox.info {
+    padding: 0 !important; margin: 0 0 8px; border: 0; background: none; color: var(--padi-muted); font-size: 15px; line-height: 1.7; max-width: 760px;
+}
+@media (max-width: 575px) { .moon-layout .moon-section.padi-page-head { padding: 28px 0 22px; } }
+
+/* Site announcements (native forum posts on the site home) as a card grid. */
+.moon-layout#page-site-index #site-news-forum { margin-top: 16px; }
+.moon-layout#page-site-index #site-news-forum > [id^="discussion-list"] {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch;
+}
+.moon-layout#page-site-index #site-news-forum > [id^="discussion-list"] > :not(article) { grid-column: 1 / -1; }
+.moon-layout#page-site-index #site-news-forum > [id^="discussion-list"] > .py-3:not(:has(*)) { display: none; }
+.moon-layout#page-site-index #site-news-forum article.forum-post-container { margin: 0 !important; min-width: 0; }
+.moon-layout#page-site-index #site-news-forum article > .forumpost {
+    flex-direction: column; height: 100%; margin: 0 !important; padding: 24px !important;
+    border: 1px solid var(--padi-line) !important; border-radius: 14px; background: var(--bs-body-bg);
+    box-shadow: inset 0 3px var(--padi-gold), 0 4px 16px rgb(0 0 0 / 4%);
+    transition: border-color .2s, box-shadow .2s;
+}
+.moon-layout#page-site-index #site-news-forum article > .forumpost:hover { border-color: var(--padi-green) !important; box-shadow: inset 0 3px var(--padi-gold), 0 8px 24px rgb(0 0 0 / 9%); }
+.moon-layout#page-site-index #site-news-forum [data-region-content="forum-post-core"],
+.moon-layout#page-site-index #site-news-forum .body-content-container,
+.moon-layout#page-site-index #site-news-forum .content-alignment-container { display: flex; flex-direction: column; flex: 1 1 auto; }
+.moon-layout#page-site-index #site-news-forum header.header { align-items: flex-start; margin-bottom: 14px !important; }
+.moon-layout#page-site-index #site-news-forum header.header > .me-2 { width: 40px !important; flex: 0 0 40px; margin-right: 12px !important; }
+.moon-layout#page-site-index #site-news-forum header.header h3 { font-size: 17px; line-height: 1.4; color: var(--padi-forest); margin-bottom: 4px !important; overflow-wrap: anywhere; }
+.moon-layout#page-site-index #site-news-forum header.header .mb-3 { margin: 0 !important; font-size: 12px; line-height: 1.5; color: var(--padi-muted); }
+.moon-layout#page-site-index #site-news-forum .author-groups-container { display: none; }
+.moon-layout#page-site-index #site-news-forum .post-content-container {
+    display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+    font-size: 14px; line-height: 1.7; color: var(--padi-muted);
+}
+.moon-layout#page-site-index #site-news-forum .post-content-container p { margin: 0 0 .4em; }
+.moon-layout#page-site-index #site-news-forum .post-actions { padding: 0 !important; }
+.moon-layout#page-site-index #site-news-forum .post-actions a[href*="discuss.php"] { display: none; }
+.moon-layout#page-site-index #site-news-forum .post-actions .btn { font-size: 13px; padding: 4px 8px; }
+.moon-layout#page-site-index #site-news-forum .link.text-end {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-top: auto; padding-top: 14px;
+    border-top: 1px solid var(--padi-line); text-align: left !important; font-size: 12px; color: var(--padi-muted);
+}
+.moon-layout#page-site-index #site-news-forum .content-alignment-container > .d-flex.flex-wrap { margin-bottom: 14px; }
+.moon-layout#page-site-index #site-news-forum .link.text-end a { font-size: 13px; font-weight: 700; color: var(--padi-green); text-decoration: none; }
+.moon-layout#page-site-index #site-news-forum .link.text-end a::after { content: " \2192"; }
+.moon-layout#page-site-index #site-news-forum .link.text-end a:hover { text-decoration: underline; }
+@media (max-width: 991px) { .moon-layout#page-site-index #site-news-forum > [id^="discussion-list"] { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; } }
+@media (max-width: 575px) { .moon-layout#page-site-index #site-news-forum > [id^="discussion-list"] { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .moon-layout#page-site-index #site-news-forum article > .forumpost { transition: none; } }
+
+/* Forum discussion page (e.g. site announcements): readable column, PADI cards. */
+.moon-layout#page-mod-forum-discuss [role="main"] { max-width: 880px; margin: 0 auto; }
+.moon-layout#page-mod-forum-discuss h3.discussionname {
+    margin: 8px 0 20px; font-size: clamp(26px, 3vw, 34px); font-weight: 700; line-height: 1.25; letter-spacing: -.02em; color: var(--padi-forest);
+}
+.moon-layout#page-mod-forum-discuss h3.discussionname::before {
+    content: ""; display: block; width: 28px; height: 3px; margin-bottom: 14px; background: var(--padi-gold);
+}
+.moon-layout#page-mod-forum-discuss [data-content="forum-discussion"] > .d-flex:first-child { justify-content: flex-end; margin-bottom: 16px !important; }
+.moon-layout#page-mod-forum-discuss select.singleselect { min-height: 40px; font-size: 13px; border-color: var(--padi-line); }
+.moon-layout#page-mod-forum-discuss .forumpost {
+    margin: 0 0 16px !important; padding: 28px !important;
+    border: 1px solid var(--padi-line) !important; border-radius: 14px; background: var(--bs-body-bg);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 4%);
+}
+.moon-layout#page-mod-forum-discuss .forumpost.firstpost { box-shadow: inset 0 3px var(--padi-gold), 0 4px 16px rgb(0 0 0 / 4%); }
+.moon-layout#page-mod-forum-discuss .forum-post-container:focus { outline: 0; }
+.moon-layout#page-mod-forum-discuss .forum-post-container:focus > .focus-target { outline: 0; }
+.moon-layout#page-mod-forum-discuss .forum-post-container:focus-visible > .focus-target { outline: 2px solid var(--padi-green); outline-offset: 3px; }
+.moon-layout#page-mod-forum-discuss .forumpost header.header { align-items: center; margin-bottom: 20px !important; padding-bottom: 18px; border-bottom: 1px solid var(--padi-line); }
+.moon-layout#page-mod-forum-discuss .forumpost header.header > .me-2 { width: 48px !important; flex: 0 0 48px; margin-right: 14px !important; }
+.moon-layout#page-mod-forum-discuss .forumpost header.header h3 { font-size: 17px; line-height: 1.4; color: var(--padi-forest); margin-bottom: 4px !important; }
+.moon-layout#page-mod-forum-discuss .forumpost header.header .mb-3 { margin: 0 !important; font-size: 13px; color: var(--padi-muted); }
+.moon-layout#page-mod-forum-discuss .forumpost .author-groups-container { display: none; }
+.moon-layout#page-mod-forum-discuss .forumpost .post-content-container { font-size: 16px; line-height: 1.8; color: var(--padi-ink); overflow-wrap: anywhere; }
+.moon-layout#page-mod-forum-discuss .forumpost .post-content-container p:last-child { margin-bottom: 0; }
+.moon-layout#page-mod-forum-discuss .forumpost .post-actions { margin-top: 18px; padding: 0 !important; gap: 4px; }
+.moon-layout#page-mod-forum-discuss .forumpost .post-actions .btn { padding: 6px 10px; font-size: 13px; border-radius: 8px; color: var(--padi-green); }
+.moon-layout#page-mod-forum-discuss .forumpost .post-actions .btn:hover { background: color-mix(in srgb, var(--padi-green) 8%, var(--bs-body-bg)); text-decoration: none; }
+.moon-layout#page-mod-forum-discuss .forumpost .post-actions a[href*="#p"]::before { content: "\f0c1"; font-family: "Font Awesome 6 Free"; font-weight: 900; margin-right: 6px; font-size: 12px; }
+.moon-layout#page-mod-forum-discuss .discussion-nav { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--padi-line); }
+.moon-layout#page-mod-forum-discuss .discussion-nav ul { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.moon-layout#page-mod-forum-discuss .discussion-nav li { max-width: 100%; }
+.moon-layout#page-mod-forum-discuss .discussion-nav li.next-discussion { margin-left: auto; text-align: right; }
+.moon-layout#page-mod-forum-discuss .discussion-nav .btn {
+    display: inline-block; max-width: 100%; padding: 12px 18px; white-space: normal; text-align: inherit;
+    font-size: 14px; font-weight: 600; color: var(--padi-forest); text-decoration: none;
+    border: 1px solid var(--padi-line); border-radius: 10px; background: var(--bs-body-bg);
+}
+.moon-layout#page-mod-forum-discuss .discussion-nav .btn:hover { border-color: var(--padi-green); background: color-mix(in srgb, var(--padi-green) 5%, var(--bs-body-bg)); }
+@media (max-width: 575px) { .moon-layout#page-mod-forum-discuss .forumpost { padding: 20px !important; } }
+
+/* Page structure from the Moon layouts: page header + secondary navigation (course/profile tabs). */
+.moon-layout .moon-section.padi-page-tabs:not(:has(.nav-item:not(.dropdownmoremenu))) { display: none; }
+.moon-layout .moon-section.padi-page-tabs { background: var(--bs-body-bg); border-bottom: 1px solid var(--padi-line); }
+.moon-layout .padi-page-tabs .secondary-navigation { margin: 0; padding: 0; border: 0; }
+.moon-layout .padi-page-tabs .moremenu { margin: 0; }
+.moon-layout .padi-page-tabs .nav { border: 0; gap: 4px; }
+.moon-layout .padi-page-tabs .nav-link {
+    padding: 15px 14px; margin: 0; border: 0; border-radius: 0; font-size: 14px; font-weight: 600;
+    color: var(--padi-ink); background: none;
+}
+.moon-layout .padi-page-tabs .nav-link:hover { color: var(--padi-green); background: color-mix(in srgb, var(--padi-green) 5%, var(--bs-body-bg)); }
+.moon-layout .padi-page-tabs .nav-link.active, .moon-layout .padi-page-tabs .nav-link[aria-current="true"]:not(.dropdown-toggle) {
+    color: var(--padi-forest); background: none; box-shadow: inset 0 -3px var(--padi-green);
+}
+.moon-layout .padi-page-head:has(+ .padi-page-tabs:has(.nav-item:not(.dropdownmoremenu))) { border-bottom: 0; }
+.moon-layout .padi-page-head .header-actions-container .btn { border-radius: 8px; font-weight: 600; }
+.moon-layout .padi-page-head .page-context-header .page-header-image img,
+.moon-layout .padi-page-head .page-context-header .page-header-image .userinitials { border-radius: 50%; }
+.moon-layout .padi-page-head .activityiconcontainer { margin-right: 14px; }
+
+/* Activity pages: completion / dates box and previous-next navigation. */
+.moon-layout .padi-app-content ~ * .activity-information,
+.moon-layout .activity-header { margin-bottom: 24px; }
+.moon-layout .activity-header {
+    padding: 14px 18px !important; border: 1px solid var(--padi-line); border-radius: 12px;
+    background: color-mix(in srgb, var(--padi-green) 4%, var(--bs-body-bg)) !important;
+}
+.moon-layout .activity-header .completion-info .btn { border-radius: 8px; font-weight: 600; border: 1px solid var(--padi-line); background: var(--bs-body-bg); }
+.moon-layout .activity-header .completion-info .btn-success { background: var(--padi-green); border-color: var(--padi-green); color: var(--bs-body-bg); }
+.moon-layout .activity-navigation { margin-top: 40px !important; padding: 20px 0 0 !important; border-top: 1px solid var(--padi-line); }
+.moon-layout .activity-navigation .row { align-items: center; row-gap: 12px; }
+.moon-layout .activity-navigation :is(#prev-activity-link, #next-activity-link) {
+    display: inline-block; max-width: 100%; padding: 10px 16px; white-space: normal; text-align: inherit;
+    font-size: 14px; font-weight: 600; color: var(--padi-forest); text-decoration: none;
+    border: 1px solid var(--padi-line); border-radius: 10px;
+}
+.moon-layout .activity-navigation :is(#prev-activity-link, #next-activity-link):hover { border-color: var(--padi-green); background: color-mix(in srgb, var(--padi-green) 5%, var(--bs-body-bg)); }
+.moon-layout .activity-navigation #next-activity-link { text-align: right; }
+.moon-layout .activity-navigation .urlselect select { width: 100%; border-color: var(--padi-line); }
+@media (max-width: 767px) {
+    .moon-layout .activity-navigation .row > div { display: flex; }
+    .moon-layout .activity-navigation .row > div > div { float: none !important; width: 100%; }
+    .moon-layout .activity-navigation .row > div:last-child > div { text-align: right; }
+}
+.moon-layout .moon-section.padi-admin-navigation:not(:has(.nav-item:not(.dropdownmoremenu))) { display: none; }
+.moon-layout .activity-header:empty { display: none; }
+.moon-layout .moon-activity-header .activity-header { margin-top: 32px; margin-bottom: 0; }
+.moon-layout .moon-activity-header:has(.activity-header:not(:empty)) + .padi-app-content { padding-top: 24px !important; }
+.moon-layout .activity-header .activity-information { margin: 0; }
+.moon-layout#page-mod-forum-discuss h3.discussionname { font-size: clamp(22px, 2.4vw, 28px); }
+.moon-layout#page-mod-forum-discuss h3.discussionname::before { display: none; }
+
+/* Dashboard / My courses: course overview cards in the PADI card style. */
+.moon-layout .block_myoverview .course-card {
+    border: 1px solid var(--padi-line) !important; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 4%); transition: border-color .2s, box-shadow .2s;
+}
+.moon-layout .block_myoverview .course-card:hover { border-color: var(--padi-green) !important; box-shadow: 0 8px 24px rgb(0 0 0 / 9%); }
+.moon-layout .block_myoverview .course-card .card-body { padding: 18px 20px 6px; }
+.moon-layout .block_myoverview .course-card .coursename { font-size: 17px; font-weight: 700; line-height: 1.4; color: var(--padi-forest); }
+.moon-layout .block_myoverview .course-card .categoryname, .moon-layout .block_myoverview .course-card .text-muted { font-size: 13px; color: var(--padi-muted) !important; }
+.moon-layout .block_myoverview .course-card .card-footer { padding: 10px 20px 16px; border: 0; font-size: 13px; }
+.moon-layout .block_myoverview .card-deck.dashboard-card-deck { gap: 4px; }
+@media (prefers-reduced-motion: reduce) { .moon-layout .block_myoverview .course-card { transition: none; } }
+.moon-layout#page-course-search #region-main h2 { margin: 28px 0 8px; font-size: 22px; color: var(--padi-forest); }
+.moon-layout#page-course-search .highlight { color: inherit; background: color-mix(in srgb, var(--padi-gold) 35%, transparent); border-radius: 3px; padding: 0 2px; }
+
+/* Enrolment options (enrol/index.php): course card left, enrolment panel right. */
+.moon-layout#page-enrol-index [role="main"] {
+    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 0 32px; align-items: start;
+}
+.moon-layout#page-enrol-index [role="main"] > * { grid-column: 2; min-width: 0; }
+.moon-layout#page-enrol-index [role="main"] > #maincontent { position: absolute; }
+.moon-layout#page-enrol-index [role="main"] > h2 { grid-row: 1; margin: 0 0 16px; font-size: 22px; color: var(--padi-forest); }
+.moon-layout#page-enrol-index [role="main"] > .generalbox.info { grid-column: 1; grid-row: 1 / span 20; }
+.moon-layout#page-enrol-index .generalbox.info { padding: 0 !important; margin: 0; border: 0; background: none; }
+.moon-layout#page-enrol-index .coursebox {
+    display: flex; flex-direction: column; margin: 0; padding: 0; overflow: hidden;
+    border: 1px solid var(--padi-line); border-radius: 16px; background: var(--bs-body-bg); box-shadow: 0 4px 16px rgb(0 0 0 / 4%);
+}
+.moon-layout#page-enrol-index .coursebox > .content, .moon-layout#page-enrol-index .coursebox > .content > .d-flex { display: contents !important; }
+.moon-layout#page-enrol-index .coursebox .courseimage { order: 0; width: 100%; margin: 0; float: none; background: color-mix(in srgb, var(--padi-green) 8%, var(--bs-body-bg)); }
+.moon-layout#page-enrol-index .coursebox .courseimage img { display: block; width: 100%; height: auto; max-width: none; max-height: none; aspect-ratio: 16 / 9; object-fit: cover; }
+.moon-layout#page-enrol-index .coursebox > .info { order: 1; float: none; width: auto; margin: 0; padding: 24px 26px 8px; }
+.moon-layout#page-enrol-index .coursebox .coursename { float: none; width: auto; margin: 0; font-size: 24px; font-weight: 700; line-height: 1.35; }
+.moon-layout#page-enrol-index .coursebox .coursename a { color: var(--padi-forest); background: none; padding: 0; }
+.moon-layout#page-enrol-index .coursebox .flex-grow-1 { order: 2; padding: 0 26px 24px; }
+.moon-layout#page-enrol-index .coursebox .summary { float: none; width: auto; margin: 0; font-size: 15px; line-height: 1.7; color: var(--padi-muted); }
+.moon-layout#page-enrol-index .coursebox .summary p:last-child { margin-bottom: 0; }
+.moon-layout#page-enrol-index .coursebox .teachers { float: none; width: auto; margin: 16px 0 0; padding: 14px 0 0; border-top: 1px solid var(--padi-line); list-style: none; font-size: 14px; }
+.moon-layout#page-enrol-index .coursebox::after { display: none; }
+/* Right column: notices, self-enrolment / guest forms, continue button. */
+.moon-layout#page-enrol-index [role="main"] > .box:not(.info) {
+    margin: 0 0 16px; padding: 22px 24px !important; border: 1px solid var(--padi-line); border-radius: 14px;
+    background: color-mix(in srgb, var(--padi-green) 4%, var(--bs-body-bg)); font-size: 15px; line-height: 1.7;
+}
+.moon-layout#page-enrol-index [role="main"] > #notice { border-left: 4px solid var(--padi-gold); }
+.moon-layout#page-enrol-index [role="main"] > .box .mform fieldset { margin: 0; padding: 0; border: 0; }
+.moon-layout#page-enrol-index [role="main"] > .box .mform legend { font-size: 18px; font-weight: 700; color: var(--padi-forest); }
+.moon-layout#page-enrol-index [role="main"] > .box .mform .fitem { margin-bottom: 12px; }
+.moon-layout#page-enrol-index [role="main"] > .box .mform .fitem > .col-md-3, .moon-layout#page-enrol-index [role="main"] > .box .mform .fitem > .col-md-9 { flex: 0 0 100%; max-width: 100%; }
+.moon-layout#page-enrol-index [role="main"] .btn-primary { width: 100%; min-height: 46px; border-radius: 9px; font-weight: 700; }
+.moon-layout#page-enrol-index .continuebutton { margin: 0; text-align: left; }
+.moon-layout#page-enrol-index .continuebutton .btn { background: var(--bs-body-bg); color: var(--padi-forest); border: 1px solid var(--padi-green); }
+.moon-layout#page-enrol-index .continuebutton .btn:hover { background: var(--padi-green); color: var(--bs-body-bg); }
+@media (max-width: 991px) {
+    .moon-layout#page-enrol-index [role="main"] { grid-template-columns: minmax(0, 1fr); }
+    .moon-layout#page-enrol-index [role="main"] > * { grid-column: 1 !important; grid-row: auto !important; }
+    .moon-layout#page-enrol-index [role="main"] > .generalbox.info { margin-bottom: 20px; }
+}
+/* Messaging app: Moodle hides its page header here, so drop the empty title band too. */
+.moon-layout#page-message-index .moon-section.padi-page-head { display: none; }
+
+/* Secondary buttons: Moon's Secondary colour is the forest green used for hero/footer
+   backgrounds, so render .btn-secondary as an outline to keep it distinct from primary actions. */
+.moon-layout .btn-secondary:not(.dropdown-toggle) {
+    color: var(--padi-forest); background-color: var(--bs-body-bg); border-color: color-mix(in srgb, var(--padi-green) 35%, var(--bs-body-bg));
+}
+.moon-layout .btn-secondary:not(.dropdown-toggle):hover, .moon-layout .btn-secondary:not(.dropdown-toggle):focus-visible {
+    color: var(--padi-forest); background-color: color-mix(in srgb, var(--padi-green) 8%, var(--bs-body-bg)); border-color: var(--padi-green);
+}
+
+/* Form focus: soft PADI ring instead of the thick Bootstrap glow (inputs, selects, autocomplete). */
+.moon-layout :is(.form-control, .form-select):focus,
+.moon-layout .form-autocomplete-selection:is(.focus, :focus, :focus-visible) {
+    outline: 0; border-color: var(--padi-green);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--padi-green) 15%, transparent);
+}
+.moon-layout .form-autocomplete-selection { border: 1px solid transparent; border-radius: 9px; }
+/* Selected items (e.g. course category): light chip with readable text. "bg-secondary text-dark"
+   would otherwise be dark text on Moon's forest-green Secondary colour. */
+.moon-layout .badge.bg-secondary.text-dark,
+.moon-layout .form-autocomplete-selection [role="option"].badge {
+    padding: 6px 12px; border-radius: 999px; font-weight: 600;
+    color: var(--padi-forest) !important; background-color: color-mix(in srgb, var(--padi-green) 10%, var(--bs-body-bg)) !important;
+    border: 1px solid color-mix(in srgb, var(--padi-green) 28%, var(--bs-body-bg));
+}
+.moon-layout .form-autocomplete-selection [data-active-selection="true"] {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--padi-green) 35%, transparent);
+}
+.moon-layout .activity-navigation { margin-bottom: 48px !important; }
+@media (max-width: 767px) { .moon-layout .activity-navigation { margin-bottom: 32px !important; } }
+
+/* Header popovers (notifications, messages, user menu) must stack above page sections such as the hero. */
+.moon-layout .moon-section.moon-header-section { position: relative; z-index: 1030; }
+.moon-layout .popover-region-container {
+    border: 1px solid var(--padi-line); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 16px 40px rgb(0 0 0 / 14%);
+}
+.moon-layout .popover-region-header-container { padding: 0 8px 0 14px; border-bottom: 1px solid var(--padi-line); }
+.moon-layout .popover-region-header-text { font-size: 15px; font-weight: 700; color: var(--padi-forest); }
+.moon-layout .popover-region-footer-container { border-top: 1px solid var(--padi-line); background: var(--bs-body-bg); }
+/* Notification / message items: readable hover (Moodle default turns text white on the primary colour). */
+.moon-layout .popover-region-container .content-item-container {
+    padding: 12px 16px; border-bottom: 1px solid var(--padi-line); color: var(--padi-ink); background: var(--bs-body-bg);
+    box-shadow: inset 3px 0 transparent; transition: background-color .15s;
+}
+.moon-layout .popover-region-container .content-item-container.unread {
+    background: color-mix(in srgb, var(--padi-green) 5%, var(--bs-body-bg)); box-shadow: inset 3px 0 var(--padi-gold);
+}
+.moon-layout .popover-region-container .content-item-container:is(:hover, :focus-within),
+.moon-layout .popover-region-container .content-item-container.unread:is(:hover, :focus-within) {
+    color: var(--padi-ink); background: color-mix(in srgb, var(--padi-green) 10%, var(--bs-body-bg));
+}
+.moon-layout .popover-region-container .content-item-container :is(.timestamp, .view-more) { color: var(--padi-muted) !important; }
+.moon-layout .popover-region-container .content-item-body { margin-bottom: 6px; font-size: 14px; line-height: 1.5; }
+.moon-layout .popover-region-container .content-item-container.unread .notification-message { font-weight: 700; color: var(--padi-forest); }
+.moon-layout .popover-region-container .content-item-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.moon-layout .popover-region-container .content-item-footer .timestamp { font-size: 12px; line-height: 1.4; }
+.moon-layout .popover-region-container .view-more { position: static; font-size: 12px; line-height: 1.4; font-weight: 600; color: var(--padi-green) !important; white-space: nowrap; }
+.moon-layout .popover-region-container .content-item-container:hover .view-more { text-decoration: underline; }
+.moon-layout .popover-region-footer-container { display: flex; align-items: center; justify-content: center; padding: 0; }
+.moon-layout .popover-region-footer-container :is(a, .see-all-link, .popover-region-seeall-text) { font-size: 14px; font-weight: 700; color: var(--padi-green) !important; text-decoration: none; }
+.moon-layout a:hover > .popover-region-footer-container .popover-region-seeall-text, .moon-layout .popover-region-footer-container a:hover { text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .moon-layout .popover-region-container .content-item-container { transition: none; } }

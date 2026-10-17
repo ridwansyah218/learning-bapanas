@@ -1,0 +1,1005 @@
+/* eslint-disable no-trailing-spaces */
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+// jQuery is required: core/custom_interaction_events fires 'activate' via $(target).trigger(),
+// a synthetic jQuery event with no native DOM equivalent, and core/modal + message_drawer.js
+// both consume it through jQuery. There's no non-jQuery way to intercept it.
+import $ from 'jquery';
+import {isSmall} from 'core/pagehelpers';
+import {addCloseButtonToBlockSettings} from './util';
+import {setUserPreferences, getUserPreferences} from 'core_user/repository';
+import * as FocusLock from 'core/local/aria/focuslock';
+import * as PubSub from 'core/pubsub';
+import DrawerEvents from 'core/drawer_events';
+import CustomEvents from 'core/custom_interaction_events';
+
+/**
+ * JavaScript for the Snap theme sidebar menu functionality
+ *
+ * @module     theme_snap/sidebar_menu
+ * @copyright  2024 Open LMS (https://www.openlms.net)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+const SELECTORS = {
+    SIDEBAR: '#snap-sidebar-menu',
+    TRIGGER: '.snap-sidebar-menu-trigger',
+    TRIGGER_ICON: '.snap-sidebar-menu-trigger i',
+    HEADER: 'header',
+    DRAWER_BUTTON: '.snap-sidebar-menu-item[data-activeselector], ' +
+        '.drawer-toggler.drawer-left-toggle [data-activeselector]',
+    COURSE_INDEX_DRAWER_BUTTON: '.drawer-toggler.drawer-left-toggle',
+    MESSAGES_POPOVER: '[data-region="popover-region-messages"]',
+    CLOSE_DRAWER_BUTTON: '[data-action="closedrawer"]',
+    NAV_UNPINNED: '#mr-nav.headroom--unpinned',
+    GOTO_TOP_LINK: '#goto-top-link',
+    PAGE_HEADER: 'page-header',
+    DRAWER_LEFT: '.drawer-left.drawer',
+    SNAP_COURSE_FOOTER: 'snap-course-footer',
+    MODAL_BACKDROP: 'body > div > div.modal-backdrop',
+    MESSAGE_APP_CLASS: 'div[id^=\'drawer-\'] > div.message-app',
+    MESSAGE_DRAWER_TOGGLE: 'a[id^="message-drawer-toggle"]',
+    MESSAGE_DRAWER_ROOT: '[data-region="right-hand-drawer"]',
+    AI_DRAWER: '.ai-drawer',
+    PAGE_WRAPPER: '#page',
+};
+
+const CLASSES = {
+    CUSTOM_MENU_ITEM: 'custom-menu-item',
+    SHOW: 'show',
+    ACTIVE: 'active',
+    COLLAPSED: 'collapsed',
+    ROTATE: 'rotate-180',
+    STATE_VISIBLE: 'state-visible',
+    POSITIONING_OFFSCREEN: 'positioning-offscreen',
+    DRAWER_OPEN: 'snap_drawer_open',
+};
+
+const DRAWERS = {
+    SELECTORS: [
+        '.drawer:not(#theme_boost-drawers-courseindex)',
+        '.block_settings.block',
+        '#snap_feeds_side_menu',
+        '.drawer:has(.message-app)',
+        '#ai-drawer'
+    ],
+    ACTIVE_SELECTORS: [
+        '.drawer-left.drawer.show',
+        '.drawer-right.drawer.show',
+        '.block_settings.block.state-visible',
+        '#snap_feeds_side_menu.state-visible',
+        '.drawer:not(.hidden):has(.message-app)'
+    ]
+};
+
+const POPOVERS_DROPDOWNS = {
+    CLICKABLE_SELECTORS: [
+        '#user-menu-toggle', // User menu
+        '#nav-intellicart-popover-container', // Intellicart
+        '#nav-notification-popover-container', // Notifications
+        '#local-accessibility-buttoncontainer', // Accessibility
+    ]
+};
+
+const ACTIVE_SELECTORS = {
+    BLOCKS_DRAWER: '[data-activeselector="#theme_snap-drawers-blocks.show"]',
+    SNAP_FEEDS: '[data-activeselector="#snap_feeds_side_menu_trigger.active"]',
+    MESSAGES_DRAWER: '[data-activeselector=\'[data-region="popover-region-messages"]:not(.collapsed)\']',
+};
+
+const PREFERENCES = {
+    BLOCKS_DRAWER: 'drawer-open-block',
+    SNAP_FEEDS: 'snap-feeds-open',
+    MESSAGES_DRAWER: 'snap-message-drawer-open',
+};
+
+const FORCEOPEN_BODY_IDS = [
+    'page-mod-quiz-attempt',
+    'page-mod-book-view'
+];
+
+const FORCEBLOCK_BODY_IDS = [
+    'page-mod-book-edit',
+];
+
+// Pages where the message drawer must keep the geometry it gets from the stylesheet.
+// On these views the drawer is not a fixed overlay, so writing inline top/height/max-height
+// on it fights the CSS and resizes its content while scrolling.
+const SKIP_MESSAGE_DRAWER_POSITIONING_BODY_IDS = [
+    'page-message-edit',
+];
+
+const PREFERENCE_MAP = {
+    [PREFERENCES.BLOCKS_DRAWER]: ACTIVE_SELECTORS.BLOCKS_DRAWER,
+    [PREFERENCES.SNAP_FEEDS]: ACTIVE_SELECTORS.SNAP_FEEDS,
+    [PREFERENCES.MESSAGES_DRAWER]: ACTIVE_SELECTORS.MESSAGES_DRAWER,
+};
+
+let lastScrollX = 0;
+
+// True while the message drawer's focus trap is released (drawer open, non-modal).
+let drawerTrapReleased = false;
+let drawerBackdropPending = false;
+
+/**
+ * Toggle sidebar menu visibility and update its position
+ */
+const toggleSidebar = () => {
+    const sidebar = document.querySelector(SELECTORS.SIDEBAR);
+    const icon = document.querySelector(SELECTORS.TRIGGER_ICON);
+    const isClosing = sidebar.classList.contains(CLASSES.SHOW);
+
+    sidebar.classList.toggle(CLASSES.SHOW);
+    icon.classList.toggle(CLASSES.ROTATE);
+    updateElementPositions();
+    // Keep any declaring trigger's aria-expanded attribute in sync.
+    const trigger = document.querySelector(SELECTORS.TRIGGER);
+    const isOpen = sidebar.classList.contains(CLASSES.SHOW);
+    if (trigger) {
+        setAriaExpanded(trigger, isOpen);
+    }
+    
+    // If we're closing the sidebar, close any open drawers
+    if (isClosing) {
+        closeAllDrawers();
+    }
+};
+
+/**
+ * Whether inline positioning must be skipped for a drawer.
+ *
+ * @param {Element} element The drawer about to be positioned.
+ * @returns {boolean} True when the drawer must keep its stylesheet geometry.
+ */
+const skipsInlinePositioning = (element) => {
+    return SKIP_MESSAGE_DRAWER_POSITIONING_BODY_IDS.includes(document.body.id)
+        && element.matches(SELECTORS.MESSAGE_DRAWER_ROOT);
+};
+
+/**
+ * Update the position of UI elements relative to the header
+ * @param {Array|string|null} selectors - CSS selector(s) for elements to update, or null for sidebar only
+ */
+const updateElementPositions = (selectors = null) => {
+    const header = document.querySelector(SELECTORS.HEADER);
+    if (!header) {
+        return;
+    }
+
+    const headerRect = header.getBoundingClientRect();
+    const visibleHeight = window.innerHeight;
+    const topPosition = Math.max(0, headerRect.bottom);
+    const isNavUnpinned = document.querySelector(SELECTORS.NAV_UNPINNED);
+    
+    const sidebar = document.querySelector(SELECTORS.SIDEBAR);
+    if (sidebar) {
+        if (isNavUnpinned) {
+            sidebar.style.top = '0px';
+            sidebar.style.height = '100vh';
+        } else {
+            sidebar.style.top = `${topPosition}px`;
+            sidebar.style.height = `${visibleHeight - topPosition}px`;
+        }
+        
+        // Remove positioning-offscreen class after positioning is complete
+        // Add a small delay before removing the positioning-offscreen class
+        setTimeout(() => {
+            sidebar.classList.remove(CLASSES.POSITIONING_OFFSCREEN);
+        }, 100);
+    }
+
+    if (selectors) {
+        const selectorsArray = Array.isArray(selectors) ? selectors : [selectors];
+        
+        // Update each element's position
+        selectorsArray.forEach(selector => {
+            const elements = queryActiveDrawers(selector);
+            
+            elements.forEach(element => {
+                if (skipsInlinePositioning(element)) {
+                    return;
+                }
+
+                if (isNavUnpinned) {
+                    element.style.top = '0px';
+                    element.style.height = '100vh';
+                } else {
+                    element.style.top = `${topPosition}px`;
+                    element.style.height = `${visibleHeight - topPosition}px`;
+                }
+                
+                // Ensure the element is visible within the viewport if it's active
+                if (element.classList.contains(CLASSES.SHOW) || 
+                    element.classList.contains(CLASSES.ACTIVE) || 
+                    !element.classList.contains(CLASSES.COLLAPSED)) {
+                    element.style.maxHeight = isNavUnpinned ? '100vh' : `${visibleHeight - topPosition}px`;
+                }
+            });
+        });
+    }
+
+    /**
+     * Updates the vertical position of the course index button so that it:
+     * - Is positioned at 40% of the viewport height by default,
+     * - Never overlaps or sits above the bottom of the page header,
+     * - Never overlaps or goes below the top of the footer,
+     *
+     * Ensures the button stays visible and properly positioned between header and footer,
+     * and updates its position dynamically on window resize and scroll events.
+     */
+    const courseindexbutton = document.querySelector(SELECTORS.COURSE_INDEX_DRAWER_BUTTON);
+    const drawer = document.querySelector(SELECTORS.DRAWER_LEFT);
+    const footer = document.getElementById(SELECTORS.SNAP_COURSE_FOOTER);
+
+    if (courseindexbutton && drawer) {
+        const updateButtonVisibility = () => {
+            const pageHeader = document.getElementById(SELECTORS.PAGE_HEADER);
+            const headerRect = pageHeader.getBoundingClientRect();
+            const footerRect = footer.getBoundingClientRect();
+
+            const top40Percent = window.innerHeight * 0.4;
+
+            const buttonHeight = courseindexbutton.offsetHeight || 0;
+            const maxTop = footerRect.top - buttonHeight - 10;
+
+            let newTop = Math.max(headerRect.bottom + 1, top40Percent);
+
+            newTop = Math.min(newTop, maxTop);
+            courseindexbutton.style.top = `${newTop}px`;
+
+        };
+        updateButtonVisibility();
+    }
+};
+
+/**
+ * Handle drawer button clicks
+ * @param {Event} e - The event object
+ */
+const handleDrawerButtonClick = (e) => {
+    setTimeout(() => {
+        const button = e.target.closest(SELECTORS.DRAWER_BUTTON);
+        repositionGotoTopLink();
+        if (!button) {
+            return;
+        }
+
+        const activeSelector = button.dataset.activeselector;
+        if (!activeSelector) {
+            return;
+        }
+
+        const activeElements = document.querySelectorAll(activeSelector);
+        const isActive = Array.from(activeElements).some(
+            (el) =>
+            el.classList.contains(CLASSES.SHOW) ||
+            el.classList.contains(CLASSES.ACTIVE) ||
+            !el.classList.contains(CLASSES.COLLAPSED) // Consider not collapsed as active
+        );
+
+        if (isActive) {
+            // If this drawer is being opened, close others
+            closeOtherDrawers(activeSelector, button);
+            button.classList.add(CLASSES.ACTIVE);
+            setDrawerPreference(activeSelector, true);
+            toggleBodyDrawerClass();
+            setAriaExpanded(button, true);
+        } else {
+            button.classList.remove(CLASSES.ACTIVE);
+            setDrawerPreference(activeSelector, false);
+            toggleBodyDrawerClass();
+            setAriaExpanded(button, false);
+        }
+
+        // Recompute top/height/max-height now, at the exact moment the drawer's visibility
+        // just changed. This covers opening the admin block on a page/course format
+        // where no resize or scroll has happened yet since load.
+        updateElementPositions(DRAWERS.SELECTORS);
+    }, 50); // Small delay to allow the drawer state to update
+};
+
+/**
+ * Close the AI drawer if it's currently open.
+ */
+const closeAiDrawer = () => {
+    const aiDrawer = document.querySelector(SELECTORS.AI_DRAWER);
+    if (aiDrawer && aiDrawer.classList.contains(CLASSES.SHOW)) {
+        aiDrawer.classList.remove(CLASSES.SHOW);
+    }
+};
+
+/**
+ * Close all active drawers except the one matching the given selector
+ * @param {string} currentSelector - The selector for the drawer to keep open
+ * @param {Element} currentButton - The button that was clicked
+ */
+const closeOtherDrawers = (currentSelector, currentButton) => {
+    closeAiDrawer();
+    const drawerButtons = document.querySelectorAll(SELECTORS.DRAWER_BUTTON);
+    repositionGotoTopLink();
+    drawerButtons.forEach(button => {
+        if (button === currentButton) {
+            return;
+        }
+
+        const activeSelector = button.dataset.activeselector;
+        if (!activeSelector || activeSelector === currentSelector) {
+            return;
+        }
+
+        const activeElements = document.querySelectorAll(activeSelector);
+        const isActive = Array.from(activeElements).some(el =>
+            el.classList.contains(CLASSES.SHOW) ||
+            el.classList.contains(CLASSES.ACTIVE) ||
+            !el.classList.contains(CLASSES.COLLAPSED) // Consider not collapsed as active
+        );
+
+        if (isActive) {
+            const isCustomContent = button.classList.contains(CLASSES.CUSTOM_MENU_ITEM);
+            if (isCustomContent) {
+                const clickableElement = button.querySelector('a, button') || button;
+                clickableElement.click();
+            } else {
+                button.click();
+            }
+            setDrawerPreference(activeSelector, false);
+            button.classList.remove(CLASSES.ACTIVE);
+            setAriaExpanded(button, false);
+        }
+    });
+};
+
+/**
+ * Close all active drawers
+ */
+const closeAllDrawers = () => {
+    const drawerButtons = document.querySelectorAll(SELECTORS.DRAWER_BUTTON);
+    repositionGotoTopLink();
+    closeAiDrawer();
+    drawerButtons.forEach(button => {
+        const activeSelector = button.dataset.activeselector;
+        if (!activeSelector) {
+            return;
+        }
+        
+        const activeElements = document.querySelectorAll(activeSelector);
+        const isActive = Array.from(activeElements).some(el =>
+            el.classList.contains(CLASSES.SHOW) ||
+            el.classList.contains(CLASSES.ACTIVE) ||
+            !el.classList.contains(CLASSES.COLLAPSED) // Consider not collapsed as active
+        );
+
+        if (isActive) {
+            const isCustomContent = button.classList.contains(CLASSES.CUSTOM_MENU_ITEM);
+            if (isCustomContent) {
+                const clickableElement = button.querySelector('a, button') || button;
+                clickableElement.click();
+            } else {
+                button.click();
+            }
+            button.classList.remove(CLASSES.ACTIVE);
+            setAriaExpanded(button, false);
+        }
+    });
+};
+
+/**
+ * Handle messages popover click
+ */
+const handleMessagesPopoverClick = () => {
+    repositionGotoTopLink();
+};
+
+/**
+ * Sync the messages popover's collapsed state with whether the drawer is actually open.
+ * @param {boolean} collapsed
+ */
+const setMessagesPopoverCollapsed = (collapsed) => {
+    const popover = document.querySelector(SELECTORS.MESSAGES_POPOVER);
+    if (!popover) {
+        return;
+    }
+    popover.classList.toggle(CLASSES.COLLAPSED, collapsed);
+    setAriaExpanded(popover, !collapsed);
+    toggleBodyDrawerClass();
+};
+
+let messageDrawerSettleTimer = null;
+
+/**
+ * Sync #page's "offcanvas" class with whether any drawer is open, once a burst of
+ * DRAWER_SHOWN/DRAWER_HIDDEN events has settled. Debounced since a single click can fire more
+ * than one of these in a row (e.g. via closeOtherDrawers()).
+ */
+const scheduleMessageDrawerSettle = () => {
+    clearTimeout(messageDrawerSettleTimer);
+    messageDrawerSettleTimer = setTimeout(() => {
+        const anyDrawerOpen = DRAWERS.ACTIVE_SELECTORS.some(selector => document.querySelector(selector));
+        document.getElementById('page')?.classList.toggle('offcanvas', anyDrawerOpen);
+    }, 0);
+};
+
+/**
+ * Whether an interaction is outside the open message drawer and its toggle button — mirrors
+ * Core's own "outside click" condition in message_drawer.js.
+ * @param {EventTarget} target
+ * @return {boolean}
+ */
+const isOutsideMessageDrawerInteraction = (target) => {
+    // data-region="right-hand-drawer" is not unique to the message drawer (mod_forum's grader
+    // "Whole forum grading" panel emits the same attribute), so disambiguate the same way
+    // isMessageDrawerRoot() does: pick the one that actually contains the message app.
+    const drawer = Array.from(document.querySelectorAll(SELECTORS.MESSAGE_DRAWER_ROOT))
+        .find(el => el.querySelector('.message-app'));
+    if (!drawer || drawer.classList.contains('hidden') || drawer.contains(target)) {
+        return false;
+    }
+    const toggleId = drawer.getAttribute('data-origin');
+    if (toggleId && target.closest && target.closest('#' + toggleId)) {
+        return false;
+    }
+    return true;
+};
+
+/**
+ * Stop message_drawer.js's own document-level 'activate' listener from closing the drawer on
+ * outside clicks. Bound on <html>, the last stop before `document` in the bubble path, so
+ * closer 'activate' consumers (e.g. core/modal's buttons) still run unaffected.
+ */
+const preventMessageDrawerOutsideClose = () => {
+    $(document.documentElement).on(CustomEvents.events.activate, (e) => {
+        if (isOutsideMessageDrawerInteraction(e.target)) {
+            e.stopPropagation();
+        }
+    });
+};
+
+/**
+ * Applies initial drawer state based on user preferences and page context.
+ *
+ * This function runs on page load to restore the drawer (e.g. blocks drawer)
+ * according to saved preferences. It may also force the drawer to open or remain
+ * closed based on specific page conditions.
+ *
+ * Should only be used during initialization. Calling it later may cause
+ * inconsistent UI behavior.
+ *
+ * @return {Promise<void>}
+ */
+const setActiveDrawer = async() => {
+    let preferences = await getUserPreferences(null, M.cfg.userId);
+    const preferencesArray = {};
+
+    // Ensure required preference keys exist with default value if missing.
+    const defaultPreferences = {};
+    Object.values(PREFERENCES).forEach(key => {
+        if (!(key in preferences)) {
+            defaultPreferences[key] = 0;
+        }
+    });
+    preferences = { ...defaultPreferences, ...preferences };
+
+    Object.keys(preferences).forEach(pref => {
+        if (M.cfg.behatsiterunning) {
+            preferencesArray[pref] = 0;
+        } else {
+            preferencesArray[pref] = preferences[pref];
+        }
+        if (pref === PREFERENCES.BLOCKS_DRAWER) {
+            let bodyId = document.body.id;
+            // Force open but not in small screen sizes.
+            if (FORCEOPEN_BODY_IDS.includes(bodyId) && window.innerWidth > 500) {
+                preferencesArray[pref] = 1;
+            }
+            // Prevents the drawer from opening automatically on specific pages, but does not disable manual opening.
+            if (FORCEBLOCK_BODY_IDS.includes(bodyId)) {
+                preferencesArray[pref] = 0;
+            }
+        }
+    });
+    // Review which user preference is set to true, from PREFERENCE_MAP
+    for (const [prefKey, drawerSelector] of Object.entries(PREFERENCE_MAP)) {
+        // See if any Drawer was opened. (Preference set to 1)
+        const shouldOpen = preferencesArray[prefKey] === 1 || preferencesArray[prefKey] === '1';
+
+        if (shouldOpen) {
+            const button = document.querySelector(drawerSelector);
+            if (button) {
+                // Simulate click on button.
+                const clickableElement = button.querySelector('a, button') || button;
+                clickableElement.click();
+            }
+        }
+    }
+};
+
+/**
+ * Set User preferences for the corresponding Drawer selected.
+ * If "Value" = true, sets selected drawer to open and others to closed.
+ * If "Value" = false, sets selected drawer to closed only.
+ * @param {string} activeSelector - The selector for the drawer requested
+ * @param {boolean} value - The value for the preference
+ */
+const setDrawerPreference = (activeSelector, value) => {
+    // Loop all preferences map and set true or false to selected one.
+    for (const [preference, selector] of Object.entries(PREFERENCE_MAP)) {
+        if (selector.includes(activeSelector) && !isSmall() && value) {
+            // Set open status to selected Drawer.
+            setUserPreferences([{name: preference, value: true, userid: M.cfg.userId}]);
+        } else if (value) {
+            // Set closed status to other Drawers.
+            setUserPreferences([{name: preference, value: false, userid: M.cfg.userId}]);
+        } else if (selector.includes(activeSelector) && !value) {
+            // Set closed status to selected Drawer.
+            setUserPreferences([{name: preference, value: false, userid: M.cfg.userId}]);
+        }
+    }
+};
+
+
+/**
+ * Handle close drawer button clicks
+ */
+const handleCloseDrawerClick = () => {
+    repositionGotoTopLink();
+    closeAiDrawer();
+    // Remove active classes from all drawer buttons
+    document.querySelectorAll(SELECTORS.DRAWER_BUTTON).forEach(button => {
+        button.classList.remove(CLASSES.ACTIVE);
+        document.body.classList.remove(CLASSES.DRAWER_OPEN);
+    });
+    
+    // Add collapsed class to messages popover if it's open
+    const messagesPopover = document.querySelector(SELECTORS.MESSAGES_POPOVER);
+    if (messagesPopover && !messagesPopover.classList.contains(CLASSES.COLLAPSED)) {
+        setDrawerPreference(ACTIVE_SELECTORS.MESSAGES_DRAWER, false);
+        messagesPopover.classList.add(CLASSES.COLLAPSED);
+    }
+};
+
+/**
+ * Release Core's focus trap so the rest of the page stays focusable while the drawer is open.
+ * Deferred one microtask so it runs after Core's synchronous trapFocus() call.
+ */
+const releaseMessageDrawerTrap = () => {
+    if (drawerTrapReleased) {
+        return;
+    }
+    drawerTrapReleased = true;
+    drawerBackdropPending = true;
+    Promise.resolve().then(() => {
+        if (drawerTrapReleased) {
+            FocusLock.untrapFocus();
+        }
+    });
+};
+
+/**
+ * Re-arm the focus trap just before the message drawer closes, so Core's deferred
+ * untrapFocus() call pops the drawer's region instead of an unrelated modal's.
+ */
+const rearmMessageDrawerTrap = () => {
+    if (!drawerTrapReleased) {
+        return;
+    }
+    drawerTrapReleased = false;
+    drawerBackdropPending = false;
+    // Trap on the toggle, not the (now aria-hidden) drawer content, then restore real focus —
+    // trapping on an aria-hidden element triggers browser warnings and breaks focus.
+    const toggle = document.querySelector(SELECTORS.MESSAGE_DRAWER_TOGGLE);
+    if (!toggle) {
+        return;
+    }
+    const previousActiveElement = document.activeElement;
+    FocusLock.trapFocus(toggle);
+    if (previousActiveElement && previousActiveElement !== document.body) {
+        previousActiveElement.focus();
+    }
+};
+
+/**
+ * Whether a core/drawer_events payload is the message drawer, not another drawer sharing the
+ * same show/hide plumbing. May be a raw element or jQuery-wrapped.
+ * @param {Object|Element} root
+ * @return {boolean}
+ */
+const isMessageDrawerRoot = (root) => {
+    const element = root && typeof root.jquery !== 'undefined' ? root[0] : root;
+    return Boolean(element && typeof element.querySelector === 'function' && element.querySelector('.message-app'));
+};
+
+/**
+ * Setup all event listeners
+ */
+const setupEventListeners = () => {
+    const trigger = document.querySelector(SELECTORS.TRIGGER);
+    if (trigger) {
+        trigger.addEventListener('click', toggleSidebar);
+    }
+
+    // Update both sidebar and drawer positions on resize and scroll
+    window.addEventListener('resize', () => {
+        updateElementPositions(DRAWERS.SELECTORS);
+    });
+    
+    window.addEventListener('scroll', () => {
+        // Add a small delay to avoid performance issues with rapid scroll events
+        setTimeout(() => {
+            updateElementPositions(DRAWERS.SELECTORS);
+            
+            // Check if Go to Top link is visible and reposition it if needed
+            const gotoTopLink = document.querySelector(SELECTORS.GOTO_TOP_LINK);
+            if (gotoTopLink) {
+                const computedStyle = window.getComputedStyle(gotoTopLink);
+                if (computedStyle.visibility === 'visible') {
+                    repositionGotoTopLink();
+                }
+            }
+            
+            // Handle horizontal scrolling to control sticky elements (e.g. grader)
+            toggleSidebarOnHorizontalScroll(window.scrollX);
+        }, 50);
+    });
+
+    // Add click event listeners to drawer buttons
+    document.querySelectorAll(SELECTORS.DRAWER_BUTTON).forEach(button => {
+        button.addEventListener('click', handleDrawerButtonClick);
+        blockUnwantedFocus(button);
+    });
+    
+    // Add click event listener to messages popover
+    const messagesPopover = document.querySelector(SELECTORS.MESSAGES_POPOVER);
+    if (messagesPopover) {
+        messagesPopover.addEventListener('click', handleMessagesPopoverClick);
+
+        preventMessageDrawerOutsideClose();
+
+        // Make the message drawer non-modal: release Core's focus trap on show, re-arm on hide.
+        PubSub.subscribe(DrawerEvents.DRAWER_SHOWN, (root) => {
+            if (isMessageDrawerRoot(root)) {
+                releaseMessageDrawerTrap();
+                setMessagesPopoverCollapsed(false);
+                scheduleMessageDrawerSettle();
+            }
+        });
+        PubSub.subscribe(DrawerEvents.DRAWER_HIDDEN, (root) => {
+            if (isMessageDrawerRoot(root)) {
+                rearmMessageDrawerTrap();
+                setMessagesPopoverCollapsed(true);
+                scheduleMessageDrawerSettle();
+            }
+        });
+
+        // Backdrop render is async, so removal stays reactive via MutationObserver, gated to
+        // only the drawer's own backdrop.
+        const dismissCoreModalBackdrop = function(mutations) {
+            for (const mutation of mutations) {
+                if (mutation.type === 'childList') {
+                    if (drawerBackdropPending) {
+                        const messagesPopoverCoreModalBackdrop =
+                            document.querySelector(SELECTORS.MODAL_BACKDROP);
+                        if (messagesPopoverCoreModalBackdrop) {
+                            messagesPopoverCoreModalBackdrop.remove();
+                            // Restore scrolling (including horizontal scroll) on the main page.
+                            const pageWrapper = document.querySelector(SELECTORS.PAGE_WRAPPER);
+                            if (pageWrapper) {
+                                pageWrapper.style.overflow = 'visible';
+                            }
+                            drawerBackdropPending = false;
+                        }
+                    }
+
+                    const messageAppElement = document.querySelector(SELECTORS.MESSAGE_APP_CLASS);
+                    const messageDrawerRootForHidden = messageAppElement ? messageAppElement.parentElement : null;
+                    const messagePopoverIsHidden = Boolean(
+                        messageDrawerRootForHidden && messageDrawerRootForHidden.classList.contains('hidden')
+                    );
+                    const messageDrawerIcon = document.querySelector(SELECTORS.MESSAGE_DRAWER_TOGGLE);
+                    if (messagePopoverIsHidden && messageDrawerIcon === document.activeElement) {
+                        messageDrawerIcon.blur();
+                    }
+                }
+            }
+        };
+        const messageDrawerObserver = new MutationObserver(dismissCoreModalBackdrop);
+        messageDrawerObserver.observe(document.body, {subtree: true, childList: true});
+    }
+    
+    // Add click event listeners to elements with data-action="closedrawer"
+    document.querySelectorAll(SELECTORS.CLOSE_DRAWER_BUTTON).forEach(element => {
+        element.addEventListener('click', handleCloseDrawerClick);
+    });
+    
+    // Set up popover/dropdown click handlers
+    setupPopoverClickHandlers();
+};
+
+/**
+ * Initialize the sidebar menu functionality
+ */
+export const init = () => {
+    addCloseButtonToBlockSettings();
+    setupEventListeners();
+    updateElementPositions();
+    
+    // Update positions of all drawers
+    updateElementPositions(DRAWERS.SELECTORS);
+    // Open active Drawer.
+    setActiveDrawer();
+};
+
+/**
+ * Query active drawers, applying a workaround for selectors containing ':has' if needed.
+ * TODO: Delete this when the selenium version of the job is higher than 3.141.59
+ *
+ * @param {string} selector The CSS selector to query.
+ * @returns {NodeListOf<Element>|Array<Element>} A NodeList or an Array of matching elements.
+ */
+const queryActiveDrawers = (selector) => {
+    // Check if the selector string contains ':has(' and matches the specific known case
+    if (selector === '.drawer:not(.hidden):has(.message-app)') {
+        // Workaround for :has(.message-app)
+        const potentialDrawers = document.querySelectorAll('.drawer:not(.hidden)');
+        return Array.from(potentialDrawers).filter(drawer => drawer.querySelector('.message-app'));
+    } else if (selector === '.drawer:has(.message-app)') {
+        const potentialDrawers = document.querySelectorAll('.drawer');
+        return Array.from(potentialDrawers).filter(drawer => drawer.querySelector('.message-app'));
+    } else {
+        // Standard query for other selectors
+        return document.querySelectorAll(selector);
+    }
+};
+
+/**
+ * If the element (or its clickable child) declares an ariaexpanded control attribute,
+ * set the proper `aria-expanded` value.
+ * Supports both `ariaexpandedcontrol` and `aria-expanded-control` attribute names.
+ * @param {Element} element The element or container to inspect
+ * @param {boolean} expanded Whether the control should be marked expanded
+ */
+const setAriaExpanded = (element, expanded) => {
+    if (!element) {
+        return;
+    }
+
+    const target = element.querySelector('a, button') || element;
+
+    // Only update `aria-expanded` if the element (or its clickable child)
+    // already has that attribute. This avoids introducing the attribute
+    // where it wasn't present.
+    if (target.hasAttribute('aria-expanded') || element.hasAttribute('aria-expanded')) {
+        target.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    }
+};
+
+/**
+ * Reposition the "Go to Top" button based on open drawers
+ */
+const repositionGotoTopLink = () => {
+    const gotoTopLink = document.querySelector(SELECTORS.GOTO_TOP_LINK);
+    if (!gotoTopLink) {
+        return;
+    }
+    
+    gotoTopLink.style.marginRight = '';
+    
+    // Check if sidebar is showing
+    const sidebar = document.querySelector(SELECTORS.SIDEBAR);
+    const isSidebarShowing = sidebar && sidebar.classList.contains(CLASSES.SHOW);
+    
+    // Only proceed if sidebar is showing
+    if (isSidebarShowing) {
+        // Check each drawer selector using the helper function
+        for (const selector of DRAWERS.ACTIVE_SELECTORS) {
+            const activeDrawers = queryActiveDrawers(selector); // Use the helper function
+
+            if (activeDrawers.length > 0) {
+                // Get the first active drawer found for this selector type
+                const drawer = activeDrawers[0];
+                if (drawer.offsetWidth > 0 && !drawer.classList.contains('drawer-left')) {
+                    // Get the width of the drawer
+                    const drawerWidth = drawer.offsetWidth;
+                    // Add margin to position the link to the left of the drawer
+                    gotoTopLink.style.marginRight = `${drawerWidth}px`;
+                    return; // Exit after finding the first open drawer
+                }
+            }
+        }
+    }
+};
+
+/**
+ * Hide or show the sidebar based on horizontal scroll position
+ * @param {number} scrollX - The horizontal scroll position
+ */
+const toggleSidebarOnHorizontalScroll = (scrollX) => {
+    const sidebar = document.querySelector(SELECTORS.SIDEBAR);
+    if (!sidebar) {
+        return;
+    }
+    if (scrollX !== 0) {
+        if (lastScrollX === 0) {
+            // Hide sidebar
+            sidebar.style.right = '-100%';
+            sidebar.classList.remove('show');
+            // Ensure trigger (if it declares aria control) is updated.
+            const trigger = document.querySelector(SELECTORS.TRIGGER);
+            if (trigger) {
+                setAriaExpanded(trigger, false);
+            }
+            // Hide active drawers
+            DRAWERS.ACTIVE_SELECTORS.forEach(selector => {
+                const activeDrawers = queryActiveDrawers(selector); // Use the helper function
+                activeDrawers.forEach(drawer => {
+                    drawer.style.right = '-100%';
+                });
+            });
+        }
+    } else if (lastScrollX !== 0) {
+        // When returning to scroll position 0
+        sidebar.style.right = '';
+        sidebar.classList.add('show');
+        // Restore trigger aria if present.
+        const trigger = document.querySelector(SELECTORS.TRIGGER);
+        if (trigger) {
+            setAriaExpanded(trigger, true);
+        }
+        // Restore active drawers visibility
+        DRAWERS.ACTIVE_SELECTORS.forEach(selector => {
+            const activeDrawers = queryActiveDrawers(selector); // Use the helper function
+            activeDrawers.forEach(drawer => {
+                drawer.style.right = '';
+            });
+        });
+    }
+    lastScrollX = scrollX;
+};
+
+/**
+ * Add event listeners to popover/dropdown elements to close drawers first
+ */
+const setupPopoverClickHandlers = () => {
+    let isClosingDrawers = false;
+
+    const checkAndCloseDrawers = () => {
+        if (isClosingDrawers) {
+            return false;
+        }
+
+        let hasOpenDrawers = false;
+        DRAWERS.ACTIVE_SELECTORS.forEach(selector => {
+            const activeDrawers = queryActiveDrawers(selector); // Use the helper function
+            if (activeDrawers.length > 0) {
+                hasOpenDrawers = true;
+            }
+        });
+
+        if (hasOpenDrawers) {
+            // Set flag to prevent recursive calls
+            isClosingDrawers = true;
+            // Close all drawers first
+            closeAllDrawers();
+            isClosingDrawers = false;
+            return true;
+        }
+
+        return false;
+    };
+
+    POPOVERS_DROPDOWNS.CLICKABLE_SELECTORS.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+
+        elements.forEach(element => {
+            // Handle mousedown events. Needed for alternating between drawers and popovers.
+            element.addEventListener('mousedown', () => {
+                checkAndCloseDrawers();
+            }, true);
+
+            // Handle mouse clicks
+            element.addEventListener('click', () => {
+                checkAndCloseDrawers();
+            }, true);
+
+            // Handle keyboard events (Enter key)
+            element.addEventListener('keydown', (e) => {
+                // Check if the Enter key was pressed
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                    checkAndCloseDrawers();
+                }
+            }, true);
+        });
+    });
+};
+
+/**
+ * Toggle the "snap_drawer_open" class in the body, used to apply styles if necessary.
+ */
+const toggleBodyDrawerClass = () => {
+    const drawerButtons = document.querySelectorAll(SELECTORS.DRAWER_BUTTON);
+    let drawerActive = false;
+    drawerButtons.forEach(button => {
+        const activeSelector = button.dataset.activeselector;
+        if (!activeSelector) {
+            return;
+        }
+
+        const activeElements = document.querySelectorAll(activeSelector);
+        const isActive = Array.from(activeElements).some(el =>
+            el.classList.contains(CLASSES.SHOW) ||
+            el.classList.contains(CLASSES.ACTIVE) ||
+            !el.classList.contains(CLASSES.COLLAPSED) // Consider not collapsed as active
+        );
+
+        if (isActive) {
+            drawerActive = true;
+        }
+    });
+    if (drawerActive) {
+        document.body.classList.add(CLASSES.DRAWER_OPEN);
+    } else {
+        document.body.classList.remove(CLASSES.DRAWER_OPEN);
+    }
+};
+
+// Shared global state needed for blockUnwantedFocus.
+let userInitiated = false;
+
+// Global listeners (run once)
+window.addEventListener("mousedown", () => { userInitiated = true; }, true);
+window.addEventListener("mouseup",   () => { userInitiated = false; }, true);
+
+window.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
+        userInitiated = true;
+    }
+}, true);
+
+window.addEventListener("keyup", () => { userInitiated = false; }, true);
+
+/**
+ * Block unwanted focus on drawer buttons. This is a needed patch because Core has
+ * some focus handling on these buttons that we need to override.
+ * @param {*} button 
+ */
+const blockUnwantedFocus = (button) => {
+    if (!button) {
+        return;
+    }
+
+    button.addEventListener(
+        "focus", (e) => {
+            const target = e.target;
+
+            if (!userInitiated) {
+                const prevOutline = target.style.outline;
+                const prevBoxShadow = target.style.boxShadow;
+
+                target.style.outline = "none";
+                target.style.boxShadow = "none";
+
+                requestAnimationFrame(() => {
+                    if (document.activeElement === target) {
+                        target.blur();
+                    }
+
+                    requestAnimationFrame(() => {
+                        target.style.outline = prevOutline;
+                        target.style.boxShadow = prevBoxShadow;
+                    });
+                });
+            }
+        }, true);
+};

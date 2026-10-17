@@ -1,0 +1,168 @@
+@theme @theme_snap @theme_snap_sidebar_menu
+Feature: Testing sidebarmenu in theme_snap
+
+  Background:
+    Given the following "users" exist:
+      | username | firstname | lastname | email                |
+      | student1 | Student   | 1        | student1@example.com |
+
+  @javascript
+  Scenario: The sidebar menu should be opened by default
+    Given I am logged in as "admin"
+    And I am on site homepage
+    And ".snap-sidebar-menu.show" "css_element" should exist
+
+  @javascript
+  Scenario: The sidebar menu should be opened and closed by clicking on the trigger button
+    Given I am logged in as "admin"
+    And I am on site homepage
+    And ".snap-sidebar-menu.show" "css_element" should exist
+    And I click on ".snap-sidebar-menu-trigger" "css_element"
+    And ".snap-sidebar-menu.show" "css_element" should not exist
+    And ".snap-sidebar-menu" "css_element" should exist
+
+  @javascript
+  Scenario: The drawers in the sidebar menu should close when a header dropdown/popover is opened
+    Given I am logged in as "admin"
+    And I am on site homepage
+    And ".snap-sidebar-menu.show" "css_element" should exist
+    And I click on "#admin-menu-trigger" "css_element"
+    And ".block_settings.state-visible" "css_element" should exist
+    Then I click on ".usermenu .dropdown-toggle" "css_element"
+    And ".block_settings.state-visible" "css_element" should not exist
+    And I click on the block drawer toggle
+    And ".drawer.show" "css_element" should exist
+    And I click on "#nav-intellicart-popover-container" "css_element"
+    And ".drawer.show" "css_element" should not exist
+    And I click on "#snap_feeds_side_menu_trigger" "css_element"
+    And "#snap_feeds_side_menu.state-visible" "css_element" should exist
+    And I click on "#nav-notification-popover-container" "css_element"
+    And "#snap_feeds_side_menu.state-visible" "css_element" should not exist
+
+  @javascript
+  Scenario: The user menu should open when clicking its button while a sidebar menu drawer is open
+    Given the following config values are set as admin:
+      | advancedfeedsenable | 1 | theme_snap |
+    And I am logged in as "admin"
+    And I am on site homepage
+    And ".snap-sidebar-menu.show" "css_element" should exist
+    And I wait until "snap-feed" custom element is registered
+    And I click on the block drawer toggle
+    And ".drawer.show" "css_element" should exist
+    When I click on ".usermenu .dropdown-toggle" "css_element"
+    Then ".drawer.show" "css_element" should not exist
+    And "#user-action-menu.show" "css_element" should be visible
+    And I should see "Log out" in the "#user-action-menu" "css_element"
+
+  @javascript
+  Scenario: Block drawers open by default
+    Given I am logged in as "admin"
+    And the following "courses" exist:
+      | fullname | shortname | format | enablecompletion |
+      | Course 1 | C1        | topics | 1                |
+    And the following "activities" exist:
+      | activity | name      | intro        | course | idnumber | section |
+      | book     | Test Book | Test content | C1     | book1    | 0       |
+    And the following "mod_book > chapter" exists:
+      | book    | Test Book                       |
+      | title   | First chapter                   |
+      | content | This is First chapter's content |
+    And I am on the course main page for "C1"
+    And I am on the "Test Book" "book activity" page
+    And I should see "Table of contents"
+    And I turn editing mode on
+    When I click on "//div[contains(@class, 'action-list')]/a[last()]" "xpath"
+    And I should see "Chapter title"
+    And I should not see "Table of contents"
+
+  @javascript
+  Scenario: Block drawers dont open by default in small screen sizes
+    Given I am logged in as "admin"
+    And I change window size to "320x480"
+    And the following "courses" exist:
+      | fullname | shortname | format | enablecompletion |
+      | Course 1 | C1        | topics | 1                |
+    And the following "activities" exist:
+      | activity | name      | intro        | course | idnumber | section |
+      | book     | Test Book | Test content | C1     | book1    | 0       |
+    And the following "mod_book > chapter" exists:
+      | book    | Test Book                       |
+      | title   | First chapter                   |
+      | content | This is First chapter's content |
+    And I am on the course main page for "C1"
+    And I am on the "Test Book" "book activity" page
+    And I should not see "Table of contents"
+
+  @javascript
+  Scenario: The message drawer opens without producing a modal backdrop.
+    Given I log in as "admin"
+    And I click on "[id^='message-drawer-toggle-']" "css_element"
+    Then "div.message-app" "css_element" should exist
+    Then "div.modal-backdrop" "css_element" should not exist
+    And the "style" attribute of "#page" "css_element" should not contain "overflow: hidden"
+
+  @javascript
+  Scenario: Users can still reply to a forum discussion while the message drawer is open
+    Given the following "courses" exist:
+      | fullname | shortname | category |
+      | Course 1 | C1        | 0        |
+    And the following "activities" exist:
+      | activity | name            | course | idnumber |
+      | forum    | Test forum name | C1     | forum1   |
+    And the following "mod_forum > discussions" exist:
+      | forum  | course | user  | name         | message                               |
+      | forum1 | C1     | admin | Discussion 1 | Discussion contents 1, first message  |
+    And I am on the "Test forum name" "forum activity" page logged in as admin
+    And I click on "Discussion 1" "link"
+    And I click on "[id^='message-drawer-toggle-']" "css_element"
+    And "div.message-app" "css_element" should exist
+    When I click on "Reply" "link"
+    And I set the field "post" to "Reply typed while the message drawer is open"
+    And I press "Post to forum"
+    Then I should see "Reply typed while the message drawer is open"
+
+  @javascript
+  Scenario: The page element should be visible when sidebar drawers are opened
+    Given I am logged in as "admin"
+    And I am on site homepage
+    And ".snap-sidebar-menu.show" "css_element" should exist
+    And "#page" "css_element" should be visible
+    And I click on "#admin-menu-trigger" "css_element"
+    And ".block_settings.state-visible" "css_element" should exist
+    And "#page" "css_element" should be visible
+    And I click on the block drawer toggle
+    And ".drawer.show" "css_element" should exist
+    And "#page" "css_element" should be visible
+    And I click on "#snap_feeds_side_menu_trigger" "css_element"
+    And "#snap_feeds_side_menu.state-visible" "css_element" should exist
+    Then "#page" "css_element" should be visible
+
+  @javascript
+  Scenario: Collapsed sidebar menu content is hidden and reappears when reopened
+    Given I am logged in as "admin"
+    And I am on site homepage
+    And ".snap-sidebar-menu.show" "css_element" should exist
+    And I wait until "#snap-sidebar-menu-content" "css_element" is visible
+    When I click on ".snap-sidebar-menu-trigger" "css_element"
+    Then ".snap-sidebar-menu.show" "css_element" should not exist
+    And "#snap-sidebar-menu-content" "css_element" should exist
+    And I wait until "#snap-sidebar-menu-content" "css_element" is not visible
+    When I click on ".snap-sidebar-menu-trigger" "css_element"
+    Then ".snap-sidebar-menu.show" "css_element" should exist
+    And I wait until "#snap-sidebar-menu-content" "css_element" is visible
+
+  @javascript
+  Scenario: The Snap feeds trigger must be a real button and still open its drawer
+    Given I am logged in as "admin"
+    And I am on site homepage
+    And ".snap-sidebar-menu.show" "css_element" should exist
+    # Screen readers must announce it as a button, so the element has to be one.
+    Then "button#snap_feeds_side_menu_trigger" "css_element" should exist
+    # Guards against it going back to a link, which is what this replaced.
+    And "a#snap_feeds_side_menu_trigger" "css_element" should not exist
+    # The drawer used to be opened by reading the trigger's href, so a button has to
+    # keep working through the aria-controls target instead.
+    When I click on "#snap_feeds_side_menu_trigger" "css_element"
+    Then "#snap_feeds_side_menu.state-visible" "css_element" should exist
+    When I click on "#snap_feeds_side_menu_trigger" "css_element"
+    Then "#snap_feeds_side_menu.state-visible" "css_element" should not exist

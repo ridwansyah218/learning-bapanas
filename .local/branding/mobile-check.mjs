@@ -1,0 +1,16 @@
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const puppeteer=require('../browser/node_modules/puppeteer-core');
+const browser=await puppeteer.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--no-sandbox','--disable-gpu']});
+const page=await browser.newPage();
+await page.setViewport({width:320,height:900});
+await page.goto('http://localhost/learning-bapanas/',{waitUntil:'networkidle2'});
+console.log(await page.evaluate(()=>({html:{width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,x:scrollX},body:{class:document.body.className,width:document.body.clientWidth,scroll:document.body.scrollWidth},wide:Array.from(document.querySelectorAll('body *')).filter(e=>e.scrollWidth>e.clientWidth+20&&e.clientWidth>0).slice(-15).map(e=>({tag:e.tagName,class:e.className,width:e.clientWidth,scroll:e.scrollWidth})),toggle:document.querySelector('.navbar-toggler').outerHTML,drawers:Array.from(document.querySelectorAll('.drawer')).map(e=>({id:e.id,class:e.className,left:e.getBoundingClientRect().left,text:e.textContent.slice(0,180)}))})));
+await page.screenshot({path:'.local/branding/small-mobile.png',fullPage:true});
+await page.waitForFunction(()=>typeof M!=='undefined' && M.util && (!M.util.pending_js || M.util.pending_js.length===0));
+await new Promise(resolve=>setTimeout(resolve,1000));
+await page.click('.navbar-toggler');
+await new Promise(resolve=>setTimeout(resolve,1000));
+console.log('After click',await page.evaluate(()=>({body:document.body.className,drawers:Array.from(document.querySelectorAll('.drawer')).map(e=>({id:e.id,class:e.className,left:e.getBoundingClientRect().left,top:e.getBoundingClientRect().top}))})));
+await page.screenshot({path:'.local/branding/mobile-menu.png',fullPage:true});
+await browser.close();
